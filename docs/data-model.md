@@ -1,7 +1,11 @@
 # Modelo de datos conceptual
 
 > Modelo **conceptual**. No es el esquema definitivo: nombres, campos y relaciones se concretarán en
-> `db/prisma/schema.prisma` y sus migraciones durante el desarrollo. Todavía no existe ninguna tabla comercial.
+> `db/prisma/schema.prisma` y sus migraciones durante el desarrollo.
+>
+> **Implementado** (migración `init_catalog_inventory_cart`): usuarios administrativos y sesiones, auditoría,
+> categorías, productos, variantes, imágenes, existencias, movimientos, carritos y líneas. Las reservas, pedidos,
+> clientes, pagos, envíos y tablas técnicas (_outbox_, idempotencia) se añadirán con sus fases.
 
 ## Convenciones previstas
 

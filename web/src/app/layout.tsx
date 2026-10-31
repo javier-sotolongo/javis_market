@@ -1,18 +1,22 @@
-import type { Metadata } from "next";
+import "@fontsource-variable/figtree";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { BRAND_NAME } from "@javis-market/shared";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
-  title: BRAND_NAME,
+  metadataBase: new URL(process.env.PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  title: { default: BRAND_NAME, template: `%s · ${BRAND_NAME}` },
   description: `${BRAND_NAME} online store`,
 };
 
-// Idioma inicial propuesto: inglés (pendiente de confirmación).
+export const viewport: Viewport = { themeColor: "#1f5c3d" };
+
+// Idioma de la tienda: inglés.
 export default function RootLayout({ children }: { readonly children: ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-white font-sans text-gray-900 antialiased">{children}</body>
+      <body className="min-h-screen bg-canvas font-sans text-ink antialiased">{children}</body>
     </html>
   );
 }

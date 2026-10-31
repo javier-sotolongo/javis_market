@@ -5,15 +5,17 @@
   "description": "Aplicación Next.js: páginas, componentes y rutas HTTP delgadas.",
   "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "node ../scripts/with-env.mjs next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "node ../scripts/with-env.mjs next start",
     "typecheck": "next typegen && tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@fontsource-variable/figtree": "5.3.0",
     "@javis-market/api": "*",
     "@javis-market/shared": "*",
-    "@next/env": "16.4.3",
+    "better-auth": "1.7.14",
+    "lucide-react": "1.65.0",
     "next": "16.4.3",
     "react": "19.3.1",
     "react-dom": "19.3.1",

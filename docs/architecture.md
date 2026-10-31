@@ -130,14 +130,14 @@ Los paquetes internos se publican como código TypeScript (sin paso de compilaci
 
 Ajustes respecto a la estructura de referencia:
 
-| Ajuste                                 | Motivo                                                                                                     |
-| -------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `db/prisma.config.ts`                  | Prisma 7 define la URL de conexión y las rutas en un archivo de configuración, no en el esquema.           |
-| `db/src/generated/` (ignorado en git)  | Salida del generador `prisma-client`; se regenera en `postinstall` y en `build`.                           |
-| `web/src/app/api/health/`              | Única ruta existente: comprobación de vida para PM2/Nginx/monitorización.                                  |
-| `infra/nginx/javis-proxy-headers.conf` | Fragmento de cabeceras compartido por los `location` de la plantilla.                                      |
-| ESLint y Prettier únicos en la raíz    | Una sola configuración para todo el monorepo, con reglas por carpeta.                                      |
-| `.env` único en la raíz                | Next.js lo carga con `@next/env`, Prisma con `process.loadEnvFile` y el worker con `--env-file-if-exists`. |
+| Ajuste                                 | Motivo                                                                                            |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `db/prisma.config.ts`                  | Prisma 7 define la URL de conexión y las rutas en un archivo de configuración, no en el esquema.  |
+| `db/src/generated/` (ignorado en git)  | Salida del generador `prisma-client`; se regenera en `postinstall` y en `build`.                  |
+| `web/src/app/api/health/`              | Comprobación de vida para PM2/Nginx/monitorización.                                               |
+| `infra/nginx/javis-proxy-headers.conf` | Fragmento de cabeceras compartido por los `location` de la plantilla.                             |
+| ESLint y Prettier únicos en la raíz    | Una sola configuración para todo el monorepo, con reglas por carpeta.                             |
+| `.env` único en la raíz                | Next.js y el worker lo cargan con `node --env-file-if-exists` y Prisma con `process.loadEnvFile`. |
 
 ## Ejecución
 

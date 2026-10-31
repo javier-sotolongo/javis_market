@@ -1,7 +1,9 @@
 # Convenciones de API
 
-> **Propuesta.** Ningún endpoint de `/api/v1` está implementado todavía. La única ruta existente es
-> `GET /api/health` (comprobación de vida). Las rutas mencionadas aquí son ejemplos de la convención.
+> **Propuesta.** Ningún endpoint de `/api/v1` está implementado todavía. Rutas existentes: `GET /api/health`,
+> `/api/auth/*` (Better Auth, con sus propias convenciones) y `GET /media/*`. El panel y la tienda usan Server
+> Actions, que siguen las mismas reglas de validación, errores (`DomainError` → mensaje y errores por campo) y
+> autorización. Las rutas `/api/v1` mencionadas aquí son ejemplos de la convención.
 
 ## Principios
 

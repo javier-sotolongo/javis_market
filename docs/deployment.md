@@ -36,10 +36,39 @@ npm run dev:worker            # worker, en otra terminal
 
 La aplicación se ejecuta con un usuario sin privilegios (`<APP_USER>`), nunca como `root`.
 
-## Requisitos del servidor (a confirmar con el cliente)
+## Servidor Ubuntu
 
-Node.js 24 LTS, npm, PM2, Nginx, PostgreSQL 16+, Certbot (u otra fuente de certificados), acceso SSH con clave,
-firewall con solo 22/80/443 abiertos. Sistema operativo y versiones reales pendientes.
+El VPS usa **Ubuntu** (versión exacta pendiente; se recomienda una LTS reciente). Paquetes previstos:
+
+```bash
+sudo apt update && sudo apt install -y nginx postgresql certbot python3-certbot-nginx
+# Node.js 24 LTS desde NodeSource o nvm (la versión de los repositorios de Ubuntu puede ser antigua)
+sudo npm install -g pm2
+sudo adduser --system --group --home <APP_HOME> <APP_USER>
+```
+
+- `sharp` (procesado de imágenes) incluye binarios precompilados para Ubuntu x64 y arm64; no requiere librerías
+  adicionales.
+- Firewall con `ufw`: solo 22, 80 y 443 (`ufw allow OpenSSH && ufw allow 'Nginx Full' && ufw enable`).
+- PostgreSQL escuchando solo en `localhost` (configuración por defecto de Ubuntu).
+- Acceso SSH con clave, sin contraseña y sin acceso directo de `root`.
+
+### Primer arranque
+
+```bash
+sudo -u postgres createuser --pwprompt javis_app          # rol de la aplicación
+sudo -u postgres createuser --pwprompt javis_owner        # rol de migraciones
+sudo -u postgres createdb --owner javis_owner javis_market
+# Conceder a javis_app solo DML sobre las tablas (ver docs/security.md#aislamiento-de-postgresql)
+
+cd <APP_DIR> && npm ci && npm run build
+DATABASE_URL=<URL_ROL_MIGRACIONES> npm run db:migrate:deploy
+JAVIS_ENV_FILE=<ENV_FILE_PATH> pm2 start infra/pm2/ecosystem.config.cjs && pm2 save && pm2 startup
+# Crear la cuenta del dueño (pide la contraseña sin mostrarla)
+set -a && . <ENV_FILE_PATH> && set +a && npm run admin:create -- --email <OWNER_EMAIL> --name "<OWNER_NAME>"
+```
+
+Si el dueño olvida su contraseña: `npm run admin:reset-password -- --email <OWNER_EMAIL>` en el servidor.
 
 ## Procesos (PM2)
 

@@ -1,7 +1,9 @@
 # Módulos de negocio
 
-Los módulos viven en [`api/src/modules/`](../api/src/modules/). Todavía no tienen implementación; este documento
-fija sus responsabilidades y límites.
+Los módulos viven en [`api/src/modules/`](../api/src/modules/). Este documento fija sus responsabilidades y límites.
+
+Implementados: `access`, `catalog`, `inventory` y `cart`. Pendientes: `checkout`, `orders`, `payments`,
+`customers`, `content` e `integrations`.
 
 ## Reglas generales
 
@@ -80,8 +82,11 @@ pagos fuera de línea, será una operación nueva, con permiso propio y auditada
 
 ## Permisos
 
-Los permisos son cadenas `recurso:acción` asignadas a roles. Lista inicial propuesta (a confirmar con los roles
-reales del cliente):
+**v1: un único rol `admin`** con todos los permisos ([ADR 0007](decisions/0007-single-admin-role.md)). Los
+servicios comprueban `requireAdmin(actor)` en cada operación y la auditan; las tablas de "Quién puede modificar qué"
+indican el permiso que se exigirá cuando existan más roles.
+
+Diseño para roles futuros: cadenas `recurso:acción` asignadas a roles:
 
 `catalog:read`, `catalog:write`, `inventory:read`, `inventory:adjust`, `inventory:restock`, `orders:read`,
 `orders:edit`, `orders:fulfill`, `orders:cancel`, `payments:read`, `payments:refund`, `customers:read`,

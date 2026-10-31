@@ -1,6 +1,6 @@
 # Módulos de negocio
 
-Cada carpeta corresponde a un módulo del monolito. Todavía no contienen implementación.
+Cada carpeta corresponde a un módulo del monolito. Implementados: `access`, `catalog`, `inventory`, `cart`.
 
 Responsabilidades, límites y propietarios de cada dato: [docs/modules.md](../../../docs/modules.md).
 

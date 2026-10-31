@@ -16,6 +16,7 @@
     "worker"
   ],
   "scripts": {
+    "dev:all": "node scripts/dev.mjs",
     "dev": "npm run dev -w @javis-market/web",
     "dev:worker": "npm run dev -w @javis-market/worker",
     "build": "npm run db:generate && npm run build -w @javis-market/web",
@@ -26,7 +27,13 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run db:validate && npm run lint && npm run typecheck && npm run format:check",
+    "test": "vitest run --project unit",
+    "test:integration": "vitest run --project integration",
+    "test:e2e": "playwright test",
+    "test:watch": "vitest --project unit",
+    "check": "npm run db:validate && npm run lint && npm run typecheck && npm run format:check && npm test",
+    "db:local:start": "bash scripts/dev-db.sh start",
+    "db:local:stop": "bash scripts/dev-db.sh stop",
     "db:generate": "npm run generate -w @javis-market/db",
     "db:validate": "npm run validate -w @javis-market/db",
     "db:format": "npm run format:schema -w @javis-market/db",
@@ -34,10 +41,14 @@
     "db:migrate:create": "npm run migrate:create -w @javis-market/db --",
     "db:migrate:deploy": "npm run migrate:deploy -w @javis-market/db",
     "db:migrate:status": "npm run migrate:status -w @javis-market/db",
-    "db:studio": "npm run studio -w @javis-market/db"
+    "db:studio": "npm run studio -w @javis-market/db",
+    "db:seed": "node --import tsx --conditions=react-server --env-file-if-exists=.env api/src/cli/seed.ts",
+    "admin:create": "node --import tsx --conditions=react-server --env-file-if-exists=.env api/src/cli/admin.ts create",
+    "admin:reset-password": "node --import tsx --conditions=react-server --env-file-if-exists=.env api/src/cli/admin.ts reset-password"
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",
+    "@playwright/test": "1.64.1",
     "@types/node": "24.19.2",
     "eslint": "9.39.5",
     "eslint-config-next": "16.4.3",
@@ -45,6 +56,7 @@
     "prettier": "3.9.10",
     "prettier-plugin-tailwindcss": "0.8.1",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.72.1"
+    "typescript-eslint": "8.72.1",
+    "vitest": "5.0.5"
   }
 }

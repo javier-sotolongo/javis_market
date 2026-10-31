@@ -1,8 +1,12 @@
 // Esquema Prisma de Javis Market.
 //
-// Todavía NO contiene modelos comerciales: el modelo conceptual está en
-// docs/data-model.md y se convertirá en modelos y migraciones durante el
-// desarrollo. La URL de conexión se define en db/prisma.config.ts.
+// Modelo conceptual: docs/data-model.md. Propietarios de cada tabla: docs/modules.md.
+// La URL de conexión se define en db/prisma.config.ts.
+//
+// Convenciones:
+// - Tablas en snake_case plural (@@map); columnas en camelCase.
+// - Dinero en centavos enteros (`...Cents`) con moneda explícita.
+// - Restricciones CHECK añadidas a mano en las migraciones (Prisma no las modela).
 
 generator client {
   provider = "prisma-client"
@@ -11,4 +15,280 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+// =============================================================================
+// access — usuarios administrativos (tablas gestionadas por Better Auth)
+// =============================================================================
+
+/// Usuario administrativo. En v1 todos los usuarios de esta tabla tienen el rol `admin`.
+model User {
+  id            String    @id
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  @@map("admin_users")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("admin_sessions")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  /// Hash de la contraseña (proveedor `credential`). Nunca se registra ni se expone.
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("admin_accounts")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("auth_verifications")
+}
+
+enum AuditActorType {
+  ADMIN
+  SYSTEM
+}
+
+/// Registro de auditoría de solo inserción.
+model AuditLog {
+  id         String         @id @default(uuid(7)) @db.Uuid
+  actorType  AuditActorType
+  actorId    String?
+  action     String
+  entityType String
+  entityId   String?
+  changes    Json?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime       @default(now())
+
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// =============================================================================
+// catalog
+// =============================================================================
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+model Category {
+  id          String            @id @default(uuid(7)) @db.Uuid
+  name        String
+  slug        String            @unique
+  description String            @default("")
+  sortOrder   Int               @default(0)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  products    ProductCategory[]
+
+  @@map("categories")
+}
+
+model Product {
+  id          String            @id @default(uuid(7)) @db.Uuid
+  name        String
+  slug        String            @unique
+  description String            @default("")
+  status      ProductStatus     @default(DRAFT)
+  brand       String?
+  /// Proveedor de origen (p. ej. "Deliflow"). Informativo; el inventario es propio.
+  supplier    String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  variants    Variant[]
+  images      ProductImage[]
+  categories  ProductCategory[]
+
+  @@index([status, createdAt])
+  @@map("products")
+}
+
+model ProductCategory {
+  productId  String   @db.Uuid
+  categoryId String   @db.Uuid
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([productId, categoryId])
+  @@index([categoryId])
+  @@map("product_categories")
+}
+
+/// Unidad vendible y unidad de inventario (SKU).
+model Variant {
+  id                  String          @id @default(uuid(7)) @db.Uuid
+  productId           String          @db.Uuid
+  product             Product         @relation(fields: [productId], references: [id], onDelete: Restrict)
+  sku                 String          @unique
+  /// Nombre de la opción (p. ej. "500 g", "Large"). "Default" si el producto no tiene opciones.
+  title               String          @default("Default")
+  priceCents          Int
+  compareAtPriceCents Int?
+  costCents           Int?
+  currency            String          @default("USD") @db.Char(3)
+  weightGrams         Int?
+  position            Int             @default(0)
+  archivedAt          DateTime?
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+  stockLevel          StockLevel?
+  stockMovements      StockMovement[]
+  cartLines           CartLine[]
+
+  @@index([productId, position])
+  @@map("variants")
+}
+
+enum ImageSource {
+  UPLOAD
+  URL_IMPORT
+}
+
+/// Imagen de producto guardada en el almacenamiento público del VPS.
+model ProductImage {
+  id          String      @id @default(uuid(7)) @db.Uuid
+  productId   String      @db.Uuid
+  product     Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  /// Clave dentro de STORAGE_PUBLIC_DIR, generada por el servidor.
+  storageKey  String      @unique
+  contentType String
+  width       Int
+  height      Int
+  sizeBytes   Int
+  altText     String      @default("")
+  position    Int         @default(0)
+  source      ImageSource
+  /// URL de origen cuando la imagen se importó desde otro almacenamiento.
+  sourceUrl   String?
+  createdAt   DateTime    @default(now())
+
+  @@index([productId, position])
+  @@map("product_images")
+}
+
+// =============================================================================
+// inventory
+// =============================================================================
+
+/// Existencias por variante. Disponible = onHand − reserved (calculado, no almacenado).
+model StockLevel {
+  variantId String   @id @db.Uuid
+  variant   Variant  @relation(fields: [variantId], references: [id], onDelete: Restrict)
+  onHand    Int      @default(0)
+  reserved  Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@map("stock_levels")
+}
+
+enum StockMovementReason {
+  RECEIPT
+  ADJUSTMENT
+  COUNT
+  SALE
+  RETURN_RESTOCK
+}
+
+/// Registro inmutable de cada cambio de existencias físicas.
+model StockMovement {
+  id          String              @id @default(uuid(7)) @db.Uuid
+  variantId   String              @db.Uuid
+  variant     Variant             @relation(fields: [variantId], references: [id], onDelete: Restrict)
+  quantity    Int
+  /// Existencias físicas resultantes tras el movimiento.
+  onHandAfter Int
+  reason      StockMovementReason
+  reference   String?
+  actorType   AuditActorType
+  actorId     String?
+  note        String              @default("")
+  createdAt   DateTime            @default(now())
+
+  @@index([variantId, createdAt])
+  @@map("stock_movements")
+}
+
+// =============================================================================
+// cart
+// =============================================================================
+
+enum CartStatus {
+  OPEN
+  CONVERTED
+  ABANDONED
+}
+
+/// Carrito de invitado, identificado por un token aleatorio en cookie (solo se guarda su hash).
+model Cart {
+  id             String     @id @default(uuid(7)) @db.Uuid
+  tokenHash      String     @unique
+  currency       String     @default("USD") @db.Char(3)
+  status         CartStatus @default(OPEN)
+  lastActivityAt DateTime   @default(now())
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  lines          CartLine[]
+
+  @@index([status, lastActivityAt])
+  @@map("carts")
+}
+
+model CartLine {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  cartId    String   @db.Uuid
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  variantId String   @db.Uuid
+  variant   Variant  @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([cartId, variantId])
+  @@map("cart_lines")
 }

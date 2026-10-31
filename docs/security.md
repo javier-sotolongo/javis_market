@@ -4,7 +4,7 @@
 
 - Solo el panel administrativo requiere autenticación en v1 (los compradores compran como invitados).
 - Se utilizará una **solución de autenticación mantenida**, no un sistema propio de contraseñas y sesiones. La
-  librería concreta **está pendiente** y se documentará como decisión (`docs/decisions/`) antes de implementarla.
+  solución elegida es **Better Auth** ([ADR 0005](decisions/0005-admin-authentication.md)).
   Criterios: mantenimiento activo, compatibilidad con Next.js App Router, sesiones en PostgreSQL vía Prisma,
   hash de contraseñas robusto (Argon2id o bcrypt), soporte de MFA y revocación de sesiones.
 - Requisitos de sesión independientes de la librería:
@@ -12,8 +12,10 @@
   - Sesiones almacenadas en servidor y revocables; caducidad por inactividad y absoluta.
   - Rotación del identificador de sesión al iniciar sesión y al cambiar privilegios.
   - Cierre de sesión que invalida la sesión en servidor.
-  - MFA recomendado para todas las cuentas administrativas (a confirmar).
-- Altas de administradores solo por otro admin con `access:manage`; sin registro público.
+  - MFA recomendado (plugin de Better Auth disponible; pendiente de activar).
+- Sin registro público. En v1 los administradores se crean y restablecen desde la línea de comandos del servidor
+  (`npm run admin:create`, `npm run admin:reset-password`); el restablecimiento revoca todas las sesiones.
+- Límite de 5 intentos de inicio de sesión por minuto y mensaje genérico ("Invalid email or password").
 
 ## Autorización por operación
 
@@ -64,7 +66,11 @@
 
 ## Carga de imágenes
 
-- Solo administradores con `catalog:write`.
+- Solo administradores (en v1, rol único `admin`).
+- Detalle de la implementación: [ADR 0006](decisions/0006-product-images.md).
+- **Importación por URL** (descarga desde otro almacenamiento): solo `http/https` en puertos 80/443, sin
+  credenciales, sin direcciones privadas/loopback/link-local/metadatos (comprobado al conectar y en cada
+  redirección), 15 s de tiempo límite, 10 MB máximo. `IMAGE_IMPORT_ALLOWED_HOSTS` restringe los dominios.
 - Límite de tamaño (aplicación y `client_max_body_size` en Nginx).
 - Validación del tipo real por contenido (_magic bytes_), no por extensión ni por `Content-Type` del cliente.
   Formatos permitidos: JPEG, PNG, WebP, AVIF. SVG no permitido.

@@ -63,8 +63,9 @@ server {
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
     add_header X-Frame-Options "DENY" always;
 
-    # Tamaño máximo de petición (subida de imágenes del panel). Ajustar al límite definido en la app.
-    client_max_body_size 10m;
+    # Tamaño máximo de petición: subida de hasta 10 fotos de 10 MB desde el panel.
+    # Debe coincidir con experimental.serverActions.bodySizeLimit de web/next.config.ts.
+    client_max_body_size 60m;
 
     # Archivos ocultos (.env, .git, etc.): nunca se sirven.
     location ~ /\. {
@@ -98,8 +99,8 @@ server {
         include /etc/nginx/snippets/javis-proxy-headers.conf;
     }
 
-    # Inicio de sesión del panel: límite de solicitudes adicional. (Ruta prevista.)
-    location /admin/login {
+    # Inicio de sesión del panel (Better Auth): límite de solicitudes adicional al de la aplicación.
+    location = /api/auth/sign-in/email {
         limit_req zone=javis_sensitive burst=5 nodelay;
         proxy_pass http://javis_web;
         include /etc/nginx/snippets/javis-proxy-headers.conf;

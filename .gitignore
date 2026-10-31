@@ -18,7 +18,7 @@ db/src/generated/
 !.env.example
 
 # Almacenamiento local de desarrollo (en producción vive fuera del repositorio)
-storage/
+/storage/
 
 # Logs y sistema
 *.log
@@ -27,3 +27,7 @@ npm-debug.log*
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# Resultados de Playwright
+test-results/
+playwright-report/

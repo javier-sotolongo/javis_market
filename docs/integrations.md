@@ -44,10 +44,12 @@ Toda integración externa se accede a través de un **adaptador** en `api/src/ad
 ## Deliflow
 
 - Javis Market vende productos de Deliflow y de otros proveedores, con **inventario y precios propios**
-  ([ADR 0003](decisions/0003-independent-inventory.md)).
-- Se pueden reutilizar **imágenes autorizadas** de Deliflow; cada imagen registra su procedencia.
-- Mecanismo de carga (manual, archivo, otro) sin definir. Hasta entonces, la alta de productos es manual desde el
-  panel.
+  ([ADR 0003](decisions/0003-independent-inventory.md)). El campo `supplier` del producto lo identifica (uso interno).
+- Las **imágenes autorizadas** de Deliflow u otro almacenamiento se incorporan con **"Import from URL"** en la ficha
+  del producto: el servidor descarga la imagen, la procesa y la guarda en el VPS, conservando la URL de origen como
+  referencia ([ADR 0006](decisions/0006-product-images.md)). No hay enlaces en caliente al almacenamiento externo.
+- `IMAGE_IMPORT_ALLOWED_HOSTS` permite limitar la importación a los dominios de esos almacenamientos.
+- La carga de productos y existencias es manual desde el panel; una importación masiva queda pendiente de definir.
 
 ## Invello
 
