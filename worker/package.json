@@ -1,0 +1,16 @@
+{
+  "name": "@javis-market/worker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Proceso independiente para tareas diferidas, administrado con PM2.",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch --conditions=react-server --env-file-if-exists=../.env src/index.ts",
+    "start": "node --import tsx --conditions=react-server src/index.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@javis-market/api": "*",
+    "tsx": "4.23.15"
+  }
+}

@@ -1,0 +1,29 @@
+# Dependencias
+node_modules/
+
+# Compilaciones
+.next/
+dist/
+out/
+coverage/
+*.tsbuildinfo
+web/next-env.d.ts
+
+# Cliente Prisma generado (se regenera con `npm run db:generate` / postinstall)
+db/src/generated/
+
+# Variables de entorno: solo se versiona .env.example
+.env
+.env.*
+!.env.example
+
+# Almacenamiento local de desarrollo (en producción vive fuera del repositorio)
+storage/
+
+# Logs y sistema
+*.log
+npm-debug.log*
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json

@@ -1,0 +1,18 @@
+{
+  "name": "@javis-market/api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Lógica de negocio del servidor: módulos, permisos, validaciones y adaptadores externos. Paquete interno, no un servidor HTTP.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@javis-market/db": "*",
+    "@javis-market/shared": "*",
+    "server-only": "0.0.1"
+  }
+}

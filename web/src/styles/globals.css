@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+/* Tokens provisionales: la identidad visual de Javis Market está pendiente. */
+@theme {
+  --color-brand: #1f2937;
+  --color-brand-contrast: #ffffff;
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+}

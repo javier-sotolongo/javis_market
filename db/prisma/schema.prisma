@@ -1,0 +1,14 @@
+// Esquema Prisma de Javis Market.
+//
+// Todavía NO contiene modelos comerciales: el modelo conceptual está en
+// docs/data-model.md y se convertirá en modelos y migraciones durante el
+// desarrollo. La URL de conexión se define en db/prisma.config.ts.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}

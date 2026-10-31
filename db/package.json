@@ -1,0 +1,30 @@
+{
+  "name": "@javis-market/db",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Esquema Prisma, migraciones y cliente de PostgreSQL. Solo servidor.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "postinstall": "prisma generate",
+    "generate": "prisma generate",
+    "validate": "prisma validate",
+    "format:schema": "prisma format",
+    "migrate:dev": "prisma migrate dev",
+    "migrate:create": "prisma migrate dev --create-only",
+    "migrate:deploy": "prisma migrate deploy",
+    "migrate:status": "prisma migrate status",
+    "studio": "prisma studio",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "7.10.1",
+    "@prisma/client": "7.10.1",
+    "server-only": "0.0.1"
+  },
+  "devDependencies": {
+    "prisma": "7.10.1"
+  }
+}
