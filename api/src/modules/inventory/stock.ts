@@ -3,7 +3,7 @@ import { getPrisma, type Prisma, type StockMovementReason } from "@javis-market/
 import { DomainError, notFound } from "../../infrastructure/errors";
 import { normalizePage, toPage } from "../../infrastructure/pagination";
 import { parseInput } from "../../infrastructure/validation";
-import { type Actor, recordAudit, requireAdmin } from "../access";
+import { type Actor, recordAudit, requireAdmin, requireAdminOrSystem } from "../access";
 
 type Tx = Prisma.TransactionClient;
 
@@ -101,6 +101,39 @@ export async function adjustStock(actor: Actor, input: AdjustStockInput, db?: Tx
     return { onHand: row.onHand, delta };
   };
 
+  return db ? run(db) : getPrisma().$transaction(run);
+}
+
+/**
+ * Fija las existencias físicas de una variante con las que informa el proveedor (sincronización con Invello,
+ * ADR 0008). Nunca baja de lo reservado: esas unidades ya están comprometidas con compradores. Registra un
+ * movimiento `SUPPLIER_SYNC` solo si la cantidad cambia; no se audita cada sincronización (el movimiento basta).
+ */
+export async function setSupplierStock(actor: Actor, variantId: string, quantity: number, db?: Tx) {
+  requireAdminOrSystem(actor);
+  const target = Math.max(0, Math.trunc(quantity));
+  const run = async (tx: Tx) => {
+    const rows = await tx.$queryRaw<{ onHand: number; previous: number }[]>`
+      WITH prev AS (SELECT "onHand" FROM "stock_levels" WHERE "variantId" = ${variantId}::uuid FOR UPDATE)
+      UPDATE "stock_levels" AS s SET "onHand" = GREATEST(${target}::int, s."reserved"), "updatedAt" = now()
+        FROM prev
+       WHERE s."variantId" = ${variantId}::uuid AND s."onHand" <> GREATEST(${target}::int, s."reserved")
+      RETURNING s."onHand" AS "onHand", prev."onHand" AS "previous"`;
+    const row = rows[0];
+    if (!row) return { delta: 0 };
+    await tx.stockMovement.create({
+      data: {
+        variantId,
+        quantity: row.onHand - row.previous,
+        onHandAfter: row.onHand,
+        reason: "SUPPLIER_SYNC",
+        actorType: actor.type === "admin" ? "ADMIN" : "SYSTEM",
+        actorId: actor.type === "admin" ? actor.userId : actor.name,
+        note: "Synced from Invello",
+      },
+    });
+    return { delta: row.onHand - row.previous };
+  };
   return db ? run(db) : getPrisma().$transaction(run);
 }
 

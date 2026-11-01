@@ -134,4 +134,4 @@ error. Lo escribe la transacción de negocio y lo consume el worker.
 
 **ExternalReference**: sistema (`deliflow`, `invello`, …), tipo de entidad local, identificador local,
 identificador externo, fecha de última sincronización. Permite vincular entidades sin acoplar el esquema a un
-sistema externo. No se definen campos específicos de Invello hasta conocer el alcance ([integrations.md](integrations.md)).
+sistema externo. Invello ya tiene tablas propias (`invello_products`, `invello_sync_state`; ADR 0008).

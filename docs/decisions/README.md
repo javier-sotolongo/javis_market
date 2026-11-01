@@ -11,5 +11,6 @@ Decisiones de arquitectura breves. Una decisión aceptada no se edita: si cambia
 | [0005](0005-admin-authentication.md)  | Autenticación del panel con Better Auth    | Aceptada |
 | [0006](0006-product-images.md)        | Imágenes de producto almacenadas en el VPS | Aceptada |
 | [0007](0007-single-admin-role.md)     | Un único rol administrativo en v1          | Aceptada |
+| [0008](0008-invello-catalog.md)       | Catálogo del proveedor desde Invello       | Aceptada |
 
 Plantilla: Contexto · Decisión · Consecuencias.

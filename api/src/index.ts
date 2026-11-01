@@ -21,3 +21,4 @@ export * from "./modules/access";
 export * from "./modules/cart";
 export * from "./modules/catalog";
 export * from "./modules/inventory";
+export * from "./modules/integrations";

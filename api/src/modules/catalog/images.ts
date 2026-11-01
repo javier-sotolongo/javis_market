@@ -1,9 +1,10 @@
 import { randomUUID } from "node:crypto";
+import sharp from "sharp";
 import { getPrisma, type ImageSource } from "@javis-market/db";
 import { getFileStorage } from "../../adapters/storage";
 import { DomainError, notFound } from "../../infrastructure/errors";
 import { createLogger } from "../../infrastructure/logger";
-import { type Actor, recordAudit, requireAdmin } from "../access";
+import { type Actor, recordAudit, requireAdmin, requireAdminOrSystem } from "../access";
 import { processProductImage } from "./image-processing";
 import { downloadRemoteImage } from "./remote-image";
 
@@ -179,6 +180,26 @@ export async function deleteProductImage(actor: Actor, imageId: string) {
     .catch((error: unknown) =>
       logger.error("image file delete failed", { storageKey: image.storageKey, error: String(error) }),
     );
+}
+
+/**
+ * Miniatura WebP de una imagen remota, sin guardarla: para previsualizar en el panel imágenes de proveedores que no
+ * se pueden enlazar directamente. Usa la misma descarga protegida que la importación por URL.
+ */
+export async function previewRemoteImage(actor: Actor, url: string, size = 160): Promise<Uint8Array> {
+  requireAdminOrSystem(actor);
+  const { body } = await downloadRemoteImage(url);
+  try {
+    return new Uint8Array(
+      await sharp(body, { limitInputPixels: 50_000_000 })
+        .rotate()
+        .resize(size, size, { fit: "inside", withoutEnlargement: true })
+        .webp({ quality: 70 })
+        .toBuffer(),
+    );
+  } catch {
+    throw new DomainError("validation_failed", "The file is not a valid image.");
+  }
 }
 
 export function productImageUrl(storageKey: string): string {

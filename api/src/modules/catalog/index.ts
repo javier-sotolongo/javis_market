@@ -1,10 +1,18 @@
-export { createCategory, deleteCategory, getCategory, listCategories, updateCategory } from "./categories";
+export {
+  createCategory,
+  deleteCategory,
+  findOrCreateCategoryByName,
+  getCategory,
+  listCategories,
+  updateCategory,
+} from "./categories";
 export {
   MAX_FILES_PER_UPLOAD,
   MAX_IMAGES_PER_PRODUCT,
   deleteProductImage,
   importProductImageFromUrl,
   moveProductImage,
+  previewRemoteImage,
   productImageUrl,
   updateProductImageAlt,
   uploadProductImages,

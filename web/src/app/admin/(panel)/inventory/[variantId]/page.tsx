@@ -13,6 +13,7 @@ const REASONS = {
   COUNT: "Count",
   SALE: "Sale",
   RETURN_RESTOCK: "Return",
+  SUPPLIER_SYNC: "Invello sync",
 } as const;
 
 export default async function VariantStockPage({ params }: { params: Promise<{ variantId: string }> }) {

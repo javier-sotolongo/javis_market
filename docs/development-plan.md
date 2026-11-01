@@ -296,7 +296,6 @@ Criterios de aceptación:
 
 ## Fuera de la primera versión
 
-- Integración con Invello (requiere definir alcance; ver [integrations.md](integrations.md#invello)).
 - Importación automática desde Deliflow.
 - Cuentas de cliente, cupones y promociones, varios almacenes, varios idiomas o monedas.
 
@@ -315,7 +314,7 @@ Criterios de aceptación:
 | Métodos y tarifas de envío                | Fase 12 (provisionales hasta entonces)   |
 | Reglas de impuestos                       | Fase 12 (provisionales hasta entonces)   |
 | VPS, dominio y destino de copias          | Fase 12                                  |
-| Alcance de Invello                        | Después de la v1                         |
+| Alcance de Invello                        | Decidido: ADR 0008                       |
 
 ## Forma de trabajo
 

@@ -1,4 +1,4 @@
-export { GUEST, requireAdmin } from "./actor";
+export { GUEST, requireAdmin, requireAdminOrSystem } from "./actor";
 export type { Actor, AdminActor } from "./actor";
 export { listRecentAudit, recordAudit } from "./audit";
 export type { AuditEntry } from "./audit";

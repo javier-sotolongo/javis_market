@@ -44,7 +44,8 @@
     "db:studio": "npm run studio -w @javis-market/db",
     "db:seed": "node --import tsx --conditions=react-server --env-file-if-exists=.env api/src/cli/seed.ts",
     "admin:create": "node --import tsx --conditions=react-server --env-file-if-exists=.env api/src/cli/admin.ts create",
-    "admin:reset-password": "node --import tsx --conditions=react-server --env-file-if-exists=.env api/src/cli/admin.ts reset-password"
+    "admin:reset-password": "node --import tsx --conditions=react-server --env-file-if-exists=.env api/src/cli/admin.ts reset-password",
+    "invello:sync": "node --import tsx --conditions=react-server --env-file-if-exists=.env api/src/cli/invello.ts"
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",

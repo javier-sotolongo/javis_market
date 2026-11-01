@@ -180,6 +180,7 @@ model Variant {
   stockLevel          StockLevel?
   stockMovements      StockMovement[]
   cartLines           CartLine[]
+  invelloProduct      InvelloProduct?
 
   @@index([productId, position])
   @@map("variants")
@@ -233,6 +234,8 @@ enum StockMovementReason {
   COUNT
   SALE
   RETURN_RESTOCK
+  /// Existencias fijadas por la sincronización con el proveedor (Invello).
+  SUPPLIER_SYNC
 }
 
 /// Registro inmutable de cada cambio de existencias físicas.
@@ -291,4 +294,66 @@ model CartLine {
 
   @@unique([cartId, variantId])
   @@map("cart_lines")
+}
+
+// =============================================================================
+// integrations — catálogo del proveedor en Invello (ADR 0008)
+// =============================================================================
+
+/// Copia local de un producto del catálogo de Invello. Solo la escribe la sincronización.
+/// El administrador decide cuáles vender: al venderlo se crea un producto propio y se vincula su variante.
+model InvelloProduct {
+  id              String   @id @default(uuid(7)) @db.Uuid
+  /// Identificador estable en Invello.
+  externalId      String   @unique
+  /// SKU del proveedor (único por proveedor); se usa como SKU de la variante local.
+  sku             String   @unique
+  name            String
+  description     String   @default("")
+  brand           String?
+  upc             String?
+  categoryName    String?
+  unit            String?
+  unitsPerCase    Int?
+  weightGrams     Int?
+  /// URLs de origen. No se enlazan desde la tienda: se descargan al vender el producto.
+  imageUrls       String[]
+  /// `false` cuando el proveedor lo desactivó o dejó de ser visible para la API key.
+  active          Boolean
+  /// Precio unitario de venta del proveedor; null si no lo tiene o la key no comparte precios.
+  priceCents      Int?
+  /// Precio mínimo anunciado (MAP) indicado por el proveedor.
+  mapPriceCents   Int?
+  /// Unidades disponibles en el proveedor; null si la key no comparte existencias.
+  available       Int?
+  remoteUpdatedAt DateTime
+  syncedAt        DateTime
+  /// Variante local vinculada cuando el administrador decide venderlo.
+  variantId       String?  @unique @db.Uuid
+  variant         Variant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([active, name])
+  @@map("invello_products")
+}
+
+/// Estado de la sincronización con Invello (una sola fila, `id = "invello"`).
+model InvelloSyncState {
+  id               String    @id
+  /// Nombre del proveedor dueño de la API key (GET /me).
+  supplierName     String?
+  /// Inicio de la última sincronización incremental de productos correcta (se usa como `updated_since`).
+  productsSyncedAt DateTime?
+  /// Inicio de la última sincronización completa correcta.
+  fullSyncedAt     DateTime?
+  /// Inicio de la última sincronización de existencias correcta.
+  stockSyncedAt    DateTime?
+  lastRunAt        DateTime?
+  lastError        String?
+  /// Evita dos sincronizaciones simultáneas (worker y botón del panel).
+  lockedUntil      DateTime?
+  updatedAt        DateTime  @updatedAt
+
+  @@map("invello_sync_state")
 }

@@ -1,7 +1,7 @@
 # Javis Market
 
 Tienda online para Estados Unidos (USD) con catálogo, carrito, checkout, pedidos y panel administrativo.
-Inventario propio, independiente de Deliflow e Invello.
+Inventario propio; los productos del proveedor que se venden desde Invello toman su stock de Invello (ADR 0008).
 
 **Estado:** en desarrollo, con diseño temporal hasta tener logo e identidad visual. Ya funcionan:
 
@@ -9,6 +9,7 @@ Inventario propio, independiente de Deliflow e Invello.
   formulario o importación desde una URL, siempre guardadas en el VPS), categorías, inventario con movimientos y
   registro de actividad.
 - **Tienda** (en inglés): portada, listado, búsqueda, categorías, ficha de producto y carrito de invitado.
+- **Invello** (`/admin/invello`): catálogo del proveedor; el admin elige qué vender y a qué precio, y el stock se sincroniza.
 - **Pendiente:** checkout, pagos, pedidos y correo. Ver [docs/development-plan.md](docs/development-plan.md).
 
 La aplicación es un **monolito modular**: una sola aplicación Next.js que contiene la interfaz y las rutas HTTP,
@@ -67,6 +68,7 @@ que leen Next.js, Prisma y el worker. En producción el archivo vive fuera del r
 | Base de datos  | `DATABASE_URL`, `DATABASE_POOL_MAX`                                                                | Ejecución y migraciones |
 | Pruebas        | `TEST_DATABASE_URL`, `E2E_DATABASE_URL` (nombre con "test")                                        | Integración y e2e       |
 | Almacenamiento | `STORAGE_PUBLIC_DIR`, `STORAGE_PRIVATE_DIR`, `PUBLIC_MEDIA_BASE_URL`, `IMAGE_IMPORT_ALLOWED_HOSTS` | Imágenes y documentos   |
+| Invello        | `INVELLO_API_KEY`, `INVELLO_API_BASE_URL`                                                          | Catálogo del proveedor  |
 | Sesiones       | `AUTH_SECRET`                                                                                      | Panel administrativo    |
 | Pagos          | `PAYMENT_PROVIDER`, `STRIPE_*`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`                               | Checkout (futuro)       |
 | Correo         | `EMAIL_PROVIDER`, `SMTP_*`, `EMAIL_FROM`                                                           | Notificaciones (futuro) |
@@ -94,6 +96,7 @@ Todos se ejecutan desde la raíz.
 | `npm run test:e2e`                                  | Pruebas e2e (Playwright) contra la compilación; ejecutar antes `npm run build`      |
 | `npm run admin:create -- --email <e> --name <n>`    | Crea una cuenta de administrador (pide la contraseña)                               |
 | `npm run admin:reset-password -- --email <e>`       | Cambia la contraseña y cierra todas las sesiones de ese administrador               |
+| `npm run invello:sync [-- --full]`                  | Sincroniza el catálogo, precios y stock de Invello (el worker lo hace cada 10 min)  |
 | `npm run db:local:start` / `db:local:stop`          | Arranca o detiene el PostgreSQL local de desarrollo                                 |
 | `npm run db:generate`                               | Genera el cliente Prisma                                                            |
 | `npm run db:validate`                               | Valida el esquema Prisma                                                            |

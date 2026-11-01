@@ -23,4 +23,9 @@ export function requireAdmin(actor: Actor): asserts actor is AdminActor {
   throw new DomainError("forbidden", "You do not have permission to perform this action.");
 }
 
+/** Para operaciones que pueden lanzar el panel o un proceso del sistema (p. ej. sincronizaciones del worker). */
+export function requireAdminOrSystem(actor: Actor): asserts actor is Exclude<Actor, { type: "guest" }> {
+  if (actor.type === "guest") throw new DomainError("unauthenticated", "Please sign in.");
+}
+
 export const GUEST: Actor = { type: "guest" };

@@ -3,6 +3,7 @@ import { notFound } from "../../infrastructure/errors";
 import { parseInput } from "../../infrastructure/validation";
 import { type Actor, recordAudit, requireAdmin } from "../access";
 import { type CategoryInput, categorySchema } from "./schemas";
+import { slugify } from "../../infrastructure/slug";
 import { resolveSlug } from "./slugs";
 
 export async function listCategories(actor: Actor) {
@@ -78,4 +79,12 @@ export async function deleteCategory(actor: Actor, id: string) {
       tx,
     );
   });
+}
+
+/** Devuelve la categoría con ese nombre (comparado por slug) o la crea. Para importar productos de proveedores. */
+export async function findOrCreateCategoryByName(actor: Actor, name: string) {
+  requireAdmin(actor);
+  const slug = slugify(name);
+  const existing = slug ? await getPrisma().category.findUnique({ where: { slug } }) : null;
+  return existing ?? createCategory(actor, { name });
 }

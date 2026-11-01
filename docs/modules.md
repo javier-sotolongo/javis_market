@@ -2,8 +2,8 @@
 
 Los módulos viven en [`api/src/modules/`](../api/src/modules/). Este documento fija sus responsabilidades y límites.
 
-Implementados: `access`, `catalog`, `inventory` y `cart`. Pendientes: `checkout`, `orders`, `payments`,
-`customers`, `content` e `integrations`.
+Implementados: `access`, `catalog`, `inventory`, `cart` e `integrations` (Invello). Pendientes: `checkout`,
+`orders`, `payments`, `customers` y `content`.
 
 ## Reglas generales
 
@@ -20,18 +20,18 @@ Implementados: `access`, `catalog`, `inventory` y `cart`. Pendientes: `checkout`
 
 ## Mapa de módulos
 
-| Módulo         | Responsabilidad                                                                                | Datos propios                                  | No hace                                                         |
-| -------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------- |
-| `catalog`      | Productos, categorías, variantes/SKU, precios de venta, imágenes y visibilidad                 | Productos, categorías, variantes, imágenes     | Existencias; precio cobrado en un pedido ya creado              |
-| `inventory`    | Existencias físicas, movimientos, reservas y disponibilidad                                    | Existencias, movimientos, reservas             | Decidir cuándo se reserva o se descuenta (lo pide su llamador)  |
-| `cart`         | Carritos y líneas; recalcular importes indicativos con precios vigentes                        | Carritos, líneas de carrito                    | Reservar inventario; crear pedidos                              |
-| `checkout`     | Orquestar la compra: validar carrito, calcular totales, reservar, crear pedido e iniciar pago  | Sesiones de checkout                           | Confirmar pagos; tarifas e impuestos definitivos (pendientes)   |
-| `orders`       | Pedidos, líneas con copia histórica, estados del pedido y de preparación/envío, notas internas | Pedidos, líneas, envíos                        | Cobrar o reembolsar; mover inventario directamente              |
-| `payments`     | Intentos de pago, eventos del proveedor, confirmación verificada, reembolsos                   | Intentos de pago, eventos de pago, reembolsos  | Cambiar existencias por su cuenta; enviar correos               |
-| `customers`    | Datos de contacto y direcciones de compradores (invitados en v1)                               | Clientes, direcciones                          | Autenticación del panel                                         |
-| `access`       | Usuarios administrativos, sesiones, roles, permisos y auditoría                                | Usuarios admin, sesiones, roles, auditoría     | Reglas de negocio de otros módulos                              |
-| `content`      | Páginas y textos editables (legales, informativos)                                             | Páginas de contenido                           | Catálogo                                                        |
-| `integrations` | Futuras integraciones con terceros (Deliflow, Invello) mediante referencias externas           | Referencias externas, registros de importación | Escribir en tablas de otros módulos sin pasar por sus servicios |
+| Módulo         | Responsabilidad                                                                                | Datos propios                                 | No hace                                                         |
+| -------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------- | --------------------------------------------------------------- |
+| `catalog`      | Productos, categorías, variantes/SKU, precios de venta, imágenes y visibilidad                 | Productos, categorías, variantes, imágenes    | Existencias; precio cobrado en un pedido ya creado              |
+| `inventory`    | Existencias físicas, movimientos, reservas y disponibilidad                                    | Existencias, movimientos, reservas            | Decidir cuándo se reserva o se descuenta (lo pide su llamador)  |
+| `cart`         | Carritos y líneas; recalcular importes indicativos con precios vigentes                        | Carritos, líneas de carrito                   | Reservar inventario; crear pedidos                              |
+| `checkout`     | Orquestar la compra: validar carrito, calcular totales, reservar, crear pedido e iniciar pago  | Sesiones de checkout                          | Confirmar pagos; tarifas e impuestos definitivos (pendientes)   |
+| `orders`       | Pedidos, líneas con copia histórica, estados del pedido y de preparación/envío, notas internas | Pedidos, líneas, envíos                       | Cobrar o reembolsar; mover inventario directamente              |
+| `payments`     | Intentos de pago, eventos del proveedor, confirmación verificada, reembolsos                   | Intentos de pago, eventos de pago, reembolsos | Cambiar existencias por su cuenta; enviar correos               |
+| `customers`    | Datos de contacto y direcciones de compradores (invitados en v1)                               | Clientes, direcciones                         | Autenticación del panel                                         |
+| `access`       | Usuarios administrativos, sesiones, roles, permisos y auditoría                                | Usuarios admin, sesiones, roles, auditoría    | Reglas de negocio de otros módulos                              |
+| `content`      | Páginas y textos editables (legales, informativos)                                             | Páginas de contenido                          | Catálogo                                                        |
+| `integrations` | Catálogo del proveedor desde Invello (ADR 0008); futuras integraciones (Deliflow)              | Catálogo de Invello, estado de sincronización | Escribir en tablas de otros módulos sin pasar por sus servicios |
 
 Adaptadores (no son módulos de negocio): `adapters/payments`, `adapters/email`, `adapters/storage`. Los usan los
 módulos a través de interfaces; nunca se importa el SDK de un proveedor fuera de su adaptador.

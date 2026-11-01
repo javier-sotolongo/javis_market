@@ -5,6 +5,7 @@ import {
   type AdminActor,
   MAX_FILES_PER_UPLOAD,
   MAX_IMAGES_PER_PRODUCT,
+  getInvelloPhotosForProduct,
   getProductForAdmin,
   isDomainError,
   listCategories,
@@ -20,6 +21,7 @@ import { ActionForm, FieldError, SubmitButton } from "@/components/ui/action-for
 import { Badge } from "@/components/ui/badge";
 import { SelectField, TextAreaField, TextField, inputClass } from "@/components/ui/fields";
 import { requireAdminSession } from "@/lib/server/session";
+import { addInvelloPhotoAction } from "../../invello/actions";
 import {
   addVariantAction,
   deleteImageAction,
@@ -53,9 +55,10 @@ export default async function EditProductPage({
   const admin = await requireAdminSession();
   const { id } = await params;
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
-  const [product, categories, { created }] = await Promise.all([
+  const [product, categories, invello, { created }] = await Promise.all([
     loadProduct(admin, id),
     listCategories(admin),
+    getInvelloPhotosForProduct(admin, id),
     searchParams,
   ]);
   const activeVariants = product.variants.filter((v) => !v.archivedAt);
@@ -234,6 +237,46 @@ export default async function EditProductPage({
               </ActionForm>
             </div>
           </Card>
+
+          {invello && invello.photos.length > 0 ? (
+            <div id="supplier-photos">
+              <Card title="Supplier photos (Invello)">
+                <p className="mb-4 text-sm text-gray-500">
+                  Choose which supplier photos to use. Each one is downloaded and stored on this server; it can take up
+                  to a minute.
+                </p>
+                <ul className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                  {invello.photos.map((photo) => (
+                    <li key={photo.url} className="rounded-lg border border-gray-200 p-2">
+                      <div className="relative aspect-square overflow-hidden rounded-md bg-gray-100">
+                        {/* Miniatura servida por el propio panel (ruta protegida), no por Invello. */}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={`/admin/invello/${invello.invelloProductId}/image?i=${photo.index}`}
+                          alt=""
+                          loading="lazy"
+                          className="size-full object-contain"
+                        />
+                      </div>
+                      <div className="mt-2">
+                        {photo.added ? (
+                          <Badge tone="green">Added</Badge>
+                        ) : (
+                          <ActionButton
+                            action={addInvelloPhotoAction.bind(null, invello.invelloProductId, photo.index)}
+                            className="px-2 py-1 text-xs"
+                            pendingLabel="Downloading…"
+                          >
+                            Add photo
+                          </ActionButton>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            </div>
+          ) : null}
         </div>
 
         <div className="space-y-6">

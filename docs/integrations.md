@@ -3,13 +3,13 @@
 Toda integración externa se accede a través de un **adaptador** en `api/src/adapters/` o del módulo
 `integrations`. Los módulos de negocio dependen de interfaces propias, no de SDKs de terceros.
 
-| Integración | Estado                                                   | Adaptador / módulo                      |
-| ----------- | -------------------------------------------------------- | --------------------------------------- |
-| Pagos       | 🟡 Stripe propuesto                                      | `adapters/payments` (`PaymentProvider`) |
-| Correo      | ⏳ Proveedor SMTP pendiente                              | `adapters/email` (`EmailProvider`)      |
-| Archivos    | ✅ Disco del VPS                                         | `adapters/storage` (`FileStorage`)      |
-| Deliflow    | ⏳ Origen de productos e imágenes; mecanismo sin definir | `modules/integrations`                  |
-| Invello     | ⏳ Sin alcance definido                                  | — (nada implementado ni contratado)     |
+| Integración | Estado                                                    | Adaptador / módulo                         |
+| ----------- | --------------------------------------------------------- | ------------------------------------------ |
+| Pagos       | 🟡 Stripe propuesto                                       | `adapters/payments` (`PaymentProvider`)    |
+| Correo      | ⏳ Proveedor SMTP pendiente                               | `adapters/email` (`EmailProvider`)         |
+| Archivos    | ✅ Disco del VPS                                          | `adapters/storage` (`FileStorage`)         |
+| Deliflow    | ⏳ Origen de productos e imágenes; mecanismo sin definir  | `modules/integrations`                     |
+| Invello     | ✅ Catálogo, precios y stock del proveedor (solo lectura) | `adapters/invello`, `modules/integrations` |
 
 ## Pagos — Stripe (propuesta intercambiable)
 
@@ -53,12 +53,16 @@ Toda integración externa se accede a través de un **adaptador** en `api/src/ad
 
 ## Invello
 
-- **La primera versión funciona sin Invello.** No hay importaciones, sincronizaciones, API keys ni acceso a su base
-  de datos.
-- No se define ningún contrato, endpoint ni formato de datos con Invello. No se ha asumido qué sistema sería la
-  fuente de verdad de ningún dato.
-- El modelo conceptual reserva una entidad genérica `ExternalReference` para vincular entidades locales con
-  identificadores externos cuando exista una integración ([data-model.md](data-model.md#referencias-externas-sujetas-a-definir-la-integración)).
-- Preguntas a resolver antes de diseñarla: qué datos se intercambian y en qué dirección, frecuencia (tiempo real o
-  lotes), mecanismo (API, archivos, webhooks), autenticación, responsable de cada sistema, comportamiento ante
-  conflictos y ante indisponibilidad de Invello.
+Decisión: [ADR 0008](decisions/0008-invello-catalog.md). API: https://app.invello.com/api/public/v1/docs/en
+
+- Cliente HTTP: [`api/src/adapters/invello/invello-client.ts`](../api/src/adapters/invello/invello-client.ts)
+  (paginación por cursor, reintentos ante 429/5xx respetando `RateLimit-Reset`). Lógica en
+  [`api/src/modules/integrations/`](../api/src/modules/integrations/).
+- Variables: `INVELLO_API_KEY` (sin ella la integración está desactivada) e `INVELLO_API_BASE_URL` (opcional).
+- Sincronización: el worker cada 10 minutos (`invello-sync`), el botón **Sync now** del panel o
+  `npm run invello:sync [-- --full]`. Nunca hay dos a la vez (bloqueo en `invello_sync_state`).
+- Panel **Admin → Invello**: buscar y filtrar el catálogo del proveedor, ver su precio, MAP y stock, y pulsar **Add to store**
+  con el precio deseado. **Stop selling / Sell again** despublican o republican el producto.
+- Fotos: al vender se descarga la principal en segundo plano; las demás se eligen en la ficha del producto (tarjeta
+  "Supplier photos"). Si `IMAGE_IMPORT_ALLOWED_HOSTS`
+  tiene valor, debe incluir `app.invello.com` y `api.invello.com`.

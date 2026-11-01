@@ -9,6 +9,7 @@ export function ActionButton({
   action,
   children,
   confirm,
+  pendingLabel,
   variant = "secondary",
   className = "",
   title,
@@ -16,6 +17,7 @@ export function ActionButton({
   readonly action: () => Promise<ActionState>;
   readonly children: ReactNode;
   readonly confirm?: string;
+  readonly pendingLabel?: string;
   readonly variant?: "primary" | "secondary" | "danger" | "ghost";
   readonly className?: string;
   readonly title?: string;
@@ -39,7 +41,7 @@ export function ActionButton({
           });
         }}
       >
-        {children}
+        {pending && pendingLabel ? pendingLabel : children}
       </button>
       {error ? (
         <span role="alert" className="mt-1 text-xs text-red-600">
