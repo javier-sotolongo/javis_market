@@ -13,7 +13,7 @@ export default function StoreError({
 }) {
   return (
     <div className="mx-auto max-w-shop px-4 py-16 sm:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-lg flex-col items-center rounded-lg border border-line bg-surface px-6 py-12 text-center">
+      <div className="mx-auto flex max-w-lg flex-col items-center rounded-2xl bg-surface px-6 py-12 text-center shadow-card">
         <span className="flex size-14 items-center justify-center rounded-full bg-danger-soft text-danger">
           <TriangleAlert aria-hidden className="size-7" strokeWidth={1.5} />
         </span>

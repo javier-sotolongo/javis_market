@@ -60,8 +60,10 @@ export function ProductPurchase({
             {variants.map((variant) => (
               <label
                 key={variant.id}
-                className={`flex min-h-11 cursor-pointer flex-col justify-center rounded-md border px-4 py-1.5 text-sm has-checked:border-brand has-checked:bg-brand-soft has-checked:ring-1 has-checked:ring-brand has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-brand ${
-                  variant.available === 0 ? "border-line text-ink-subtle" : "border-line-strong text-ink"
+                className={`flex min-h-11 cursor-pointer flex-col justify-center rounded-md border px-4 py-1.5 text-sm transition-colors has-checked:border-ink has-checked:ring-1 has-checked:ring-ink has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-brand ${
+                  variant.available === 0
+                    ? "border-line text-ink-subtle"
+                    : "border-line-strong text-ink hover:border-ink-subtle"
                 }`}
               >
                 <input

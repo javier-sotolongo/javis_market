@@ -46,8 +46,8 @@ export function AddToCartButton({
         type="submit"
         disabled={pending}
         aria-label={`Add ${productName} to cart`}
-        className={`inline-flex h-10 items-center gap-1.5 rounded-full pr-4 pl-3 text-sm font-semibold shadow-[0_1px_3px_rgb(0_0_0/0.12)] transition-colors disabled:cursor-wait ${
-          justAdded ? "bg-brand text-brand-contrast" : "bg-white text-brand hover:bg-brand hover:text-brand-contrast"
+        className={`inline-flex h-10 items-center gap-1.5 rounded-full pr-4 pl-3 text-sm font-semibold text-brand-contrast shadow-raised transition-colors disabled:cursor-wait ${
+          justAdded ? "bg-brand-active" : "bg-brand hover:bg-brand-hover active:bg-brand-active"
         }`}
       >
         {pending ? (

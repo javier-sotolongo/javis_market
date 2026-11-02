@@ -12,9 +12,7 @@ export function HeaderShell({ children }: { readonly children: ReactNode }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   return (
-    <header
-      className={`sticky top-0 z-30 border-b border-line bg-white transition-shadow ${scrolled ? "shadow-header" : ""}`}
-    >
+    <header className={`sticky top-0 z-30 bg-surface transition-shadow ${scrolled ? "shadow-header" : ""}`}>
       {children}
     </header>
   );

@@ -10,7 +10,7 @@ export default function NotFound() {
         <span className="text-brand">Javis</span> Market
         <span className="sr-only"> ({BRAND_NAME} home)</span>
       </Link>
-      <span className="mt-6 flex size-14 items-center justify-center rounded-full bg-canvas-muted text-ink-subtle">
+      <span className="mt-6 flex size-14 items-center justify-center rounded-full bg-surface text-ink-subtle shadow-card">
         <SearchX aria-hidden className="size-7" strokeWidth={1.5} />
       </span>
       <h1 className="text-2xl font-bold text-ink">Page not found</h1>

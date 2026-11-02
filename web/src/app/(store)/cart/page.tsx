@@ -64,7 +64,7 @@ export default async function CartPage() {
       ) : null}
 
       <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_24rem]">
-        <ul className="divide-y divide-line border-y border-line">
+        <ul className="divide-y divide-line rounded-2xl bg-surface px-4 shadow-card sm:px-6">
           {cart.lines.map((line) => {
             const max = Math.max(1, Math.min(MAX_QUANTITY_PER_LINE, line.available));
             const unavailable = line.issue === "unavailable";
@@ -143,7 +143,7 @@ export default async function CartPage() {
           })}
         </ul>
 
-        <aside aria-labelledby="summary-title" className="rounded-2xl bg-tile p-6 lg:sticky lg:top-36">
+        <aside aria-labelledby="summary-title" className="rounded-2xl bg-surface p-6 shadow-card lg:sticky lg:top-36">
           <h2 id="summary-title" className="text-lg font-bold text-ink">
             Order summary
           </h2>
@@ -160,7 +160,7 @@ export default async function CartPage() {
               <dt className="text-ink-muted">Taxes</dt>
               <dd className="text-ink-muted">Calculated at checkout</dd>
             </div>
-            <div className="flex items-baseline justify-between gap-4 border-t border-line-strong pt-4">
+            <div className="flex items-baseline justify-between gap-4 border-t border-line pt-4">
               <dt className="font-semibold text-ink">Subtotal</dt>
               <dd className="text-2xl font-bold text-ink tabular-nums">{formatMoney(cart.subtotal)}</dd>
             </div>

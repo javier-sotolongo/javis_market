@@ -7,13 +7,13 @@ export function StoreFooter({
 }: {
   readonly categories: readonly { readonly id: string; readonly name: string; readonly slug: string }[];
 }) {
-  const link = "text-white/75 hover:text-white hover:underline underline-offset-4";
+  const link = "text-titanium hover:text-white hover:underline underline-offset-4";
   return (
-    <footer className="mt-20 bg-brand-active text-white">
+    <footer className="mt-20 bg-graphite text-white on-dark">
       <div className="mx-auto grid max-w-shop gap-10 px-4 py-12 sm:grid-cols-[2fr_1fr_1fr] sm:px-6 lg:px-10">
         <div>
-          <Wordmark inverted />
-          <p className="mt-4 max-w-sm text-sm text-white/75">
+          <Wordmark />
+          <p className="mt-4 max-w-sm text-sm text-titanium">
             Online store for the United States. All prices are in US dollars (USD).
           </p>
         </div>
@@ -46,7 +46,7 @@ export function StoreFooter({
         </nav>
       </div>
       <div className="border-t border-white/10">
-        <p className="mx-auto max-w-shop px-4 py-5 text-xs text-white/60 sm:px-6 lg:px-10">
+        <p className="mx-auto max-w-shop px-4 py-5 text-xs text-titanium sm:px-6 lg:px-10">
           © {new Date().getFullYear()} {BRAND_NAME}
         </p>
       </div>

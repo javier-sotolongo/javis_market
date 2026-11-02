@@ -71,11 +71,11 @@ export async function CatalogView({
           </div>
           <div className="flex items-center gap-2">
             <details className="relative lg:hidden">
-              <summary className="flex h-10 cursor-pointer list-none items-center gap-2 rounded-full border border-line-strong px-4 text-sm font-semibold text-ink hover:border-ink-subtle [&::-webkit-details-marker]:hidden">
+              <summary className="flex h-10 cursor-pointer list-none items-center gap-2 rounded-full border border-line-strong bg-surface px-4 text-sm font-semibold text-ink hover:border-ink-subtle [&::-webkit-details-marker]:hidden">
                 <SlidersHorizontal aria-hidden className="size-4" />
                 Filters
               </summary>
-              <div className="absolute left-0 z-20 mt-2 w-72 max-w-[calc(100vw-2rem)] rounded-xl border border-line bg-white p-3 shadow-raised">
+              <div className="absolute left-0 z-20 mt-2 w-72 max-w-[calc(100vw-2rem)] rounded-xl border border-line bg-surface p-3 shadow-raised">
                 <CatalogFilters
                   categories={categories}
                   activeSlug={category?.slug ?? null}

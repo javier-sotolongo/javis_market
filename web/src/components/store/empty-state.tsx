@@ -13,8 +13,8 @@ export function EmptyState({
   readonly action?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center rounded-lg border border-line bg-surface px-6 py-14 text-center">
-      <span className="flex size-14 items-center justify-center rounded-full bg-canvas-muted text-ink-subtle">
+    <div className="flex flex-col items-center rounded-2xl bg-surface px-6 py-14 text-center shadow-card">
+      <span className="flex size-14 items-center justify-center rounded-full bg-canvas text-ink-subtle">
         <Icon aria-hidden className="size-7" strokeWidth={1.5} />
       </span>
       <h2 className="mt-4 text-lg font-semibold text-ink">{title}</h2>

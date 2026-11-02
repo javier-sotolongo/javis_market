@@ -25,7 +25,7 @@ export function ActiveFilters({
         <Link
           key={chip.key}
           href={chip.href}
-          className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-tile pr-2.5 pl-3.5 text-sm font-medium text-ink hover:bg-line"
+          className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-surface pr-2.5 pl-3.5 text-sm font-medium text-ink ring-1 ring-line transition-shadow ring-inset hover:ring-line-strong"
           aria-label={`Remove filter ${chip.label}`}
         >
           {chip.label}

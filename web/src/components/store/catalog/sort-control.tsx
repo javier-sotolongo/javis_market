@@ -20,7 +20,7 @@ export function SortControl({ basePath, params }: { readonly basePath: string; r
         id="catalog-sort"
         name="sort"
         defaultValue={params.sort === "name" ? "name" : "newest"}
-        className="h-10 rounded-full border border-line-strong bg-white pr-9 pl-4 text-sm font-semibold text-ink hover:border-ink-subtle focus:border-brand"
+        className="h-10 rounded-full border border-line-strong bg-surface pr-9 pl-4 text-sm font-semibold text-ink hover:border-ink-subtle focus:border-ink"
       >
         {OPTIONS.map((option) => (
           <option key={option.value} value={option.value}>

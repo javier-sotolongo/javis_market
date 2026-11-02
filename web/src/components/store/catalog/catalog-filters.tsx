@@ -26,7 +26,7 @@ export function CatalogFilters({
 }) {
   const linkClass = (active: boolean) =>
     `flex min-h-10 items-center justify-between gap-3 rounded-lg px-3 text-[0.9375rem] ${
-      active ? "bg-tile text-ink font-semibold" : "text-ink-muted hover:bg-tile hover:text-ink"
+      active ? "bg-graphite text-white font-semibold" : "text-ink-muted hover:bg-canvas-muted hover:text-ink"
     }`;
   return (
     <div className="space-y-7">
@@ -52,7 +52,11 @@ export function CatalogFilters({
                 className={linkClass(activeSlug === category.slug)}
               >
                 <span className="truncate">{category.name}</span>
-                <span className="text-sm text-ink-subtle tabular-nums">{category.productCount}</span>
+                <span
+                  className={`text-sm tabular-nums ${activeSlug === category.slug ? "text-titanium" : "text-ink-subtle"}`}
+                >
+                  {category.productCount}
+                </span>
               </Link>
             </li>
           ))}

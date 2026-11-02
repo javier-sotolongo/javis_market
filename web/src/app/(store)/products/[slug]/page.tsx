@@ -56,8 +56,10 @@ export default async function ProductPage({ params }: Props) {
 
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-16">
         <ProductGallery images={product.images} name={product.name} />
-        <div className="min-w-0">
-          {product.brand ? <p className="text-[0.9375rem] font-semibold text-brand">{product.brand}</p> : null}
+        <div className="min-w-0 rounded-2xl bg-surface p-5 shadow-card sm:p-8 lg:self-start">
+          {product.brand ? (
+            <p className="text-sm font-semibold tracking-wider text-ink-subtle uppercase">{product.brand}</p>
+          ) : null}
           <h1 className="mt-1 text-2xl leading-tight font-bold tracking-tight text-balance text-ink sm:text-3xl lg:text-4xl">
             {product.name}
           </h1>

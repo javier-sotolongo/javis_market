@@ -10,7 +10,7 @@ export function ProductGallery({ images, name }: { readonly images: readonly Sto
   const current = images[index] ?? null;
   return (
     <div className="lg:sticky lg:top-36">
-      <div className="relative aspect-square overflow-hidden rounded-2xl bg-tile">
+      <div className="relative aspect-square overflow-hidden rounded-2xl bg-surface shadow-card">
         <ProductImage image={current} sizes="(min-width: 1024px) 45vw, 100vw" priority className="p-[10%]" />
       </div>
       {images.length > 1 ? (
@@ -22,8 +22,8 @@ export function ProductGallery({ images, name }: { readonly images: readonly Sto
                 onClick={() => setIndex(i)}
                 aria-label={`Show image ${i + 1} of ${images.length}`}
                 aria-pressed={i === index}
-                className={`relative block aspect-square w-full overflow-hidden rounded-lg bg-tile ring-2 ring-offset-2 ${
-                  i === index ? "ring-brand" : "ring-transparent hover:ring-line-strong"
+                className={`relative block aspect-square w-full overflow-hidden rounded-lg bg-surface ring-2 ring-offset-2 ring-offset-canvas ${
+                  i === index ? "ring-ink" : "ring-transparent hover:ring-line-strong"
                 }`}
               >
                 <ProductImage image={{ ...image, alt: "" }} sizes="120px" className="p-2" />

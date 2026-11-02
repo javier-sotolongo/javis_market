@@ -21,19 +21,19 @@ export default async function HomePage() {
 
   return (
     <div className="mx-auto max-w-shop px-4 sm:px-6 lg:px-10">
-      <section className="mt-6 overflow-hidden rounded-2xl bg-brand text-white lg:mt-8">
+      <section className="mt-6 overflow-hidden rounded-2xl bg-graphite text-white on-dark lg:mt-8">
         <div className="grid gap-8 px-6 py-9 sm:px-10 sm:py-12 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:px-14">
           <div>
-            <p className="text-sm font-semibold tracking-wide text-white/70">Javis Market</p>
-            <h1 className="mt-2 max-w-xl text-3xl leading-tight font-bold tracking-tight text-balance sm:text-4xl lg:text-[2.75rem]">
+            <p className="text-xs font-semibold tracking-[0.18em] text-titanium uppercase">Javis Market</p>
+            <h1 className="mt-3 max-w-xl text-3xl leading-tight font-bold tracking-tight text-balance sm:text-4xl lg:text-[2.75rem]">
               Everyday groceries and home essentials
             </h1>
-            <p className="mt-4 max-w-lg text-white/80">
+            <p className="mt-4 max-w-lg text-titanium">
               Pantry staples, drinks, snacks, household and personal care products. All prices in US dollars.
             </p>
             <Link
               href="/products"
-              className="mt-7 inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 font-semibold text-brand transition-colors hover:bg-white/90"
+              className="mt-7 inline-flex h-12 items-center gap-2 rounded-full bg-brand px-6 font-semibold text-brand-contrast ring-1 ring-white/15 transition-colors ring-inset hover:bg-accent"
             >
               Shop all products
               <ArrowRight aria-hidden className="size-4" />
@@ -45,13 +45,13 @@ export default async function HomePage() {
                 <li key={category.id}>
                   <Link
                     href={`/categories/${category.slug}`}
-                    className="group block rounded-xl bg-white/10 p-2 transition-colors hover:bg-white/20"
+                    className="group block rounded-xl bg-surface p-2 text-ink transition-shadow hover:shadow-raised hover:ring-2 hover:ring-titanium"
                   >
                     <span className="relative block aspect-[4/3] overflow-hidden rounded-lg bg-tile">
                       <ProductImage
                         image={decorative(products.items.find((p) => p.image)?.image ?? null)}
                         sizes="160px"
-                        className="p-[6%]"
+                        className="p-[6%] transition-transform duration-300 group-hover:scale-[1.04]"
                       />
                     </span>
                     <span className="mt-2 block px-1 pb-0.5 text-sm font-semibold">{category.name}</span>

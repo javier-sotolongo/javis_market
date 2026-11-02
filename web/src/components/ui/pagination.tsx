@@ -37,7 +37,7 @@ export function Pagination({
   return (
     <nav aria-label="Pagination" className="mt-10 flex items-center justify-center gap-1">
       {page > 1 ? (
-        <Link className={`${item} gap-1 text-ink hover:bg-canvas-muted`} href={href(page - 1)}>
+        <Link className={`${item} gap-1 text-ink hover:bg-surface`} href={href(page - 1)}>
           <ChevronLeft aria-hidden className="size-4" />
           <span className="hidden sm:inline">Previous</span>
           <span className="sr-only sm:hidden">Previous page</span>
@@ -55,7 +55,7 @@ export function Pagination({
                 href={href(p)}
                 aria-current={p === page ? "page" : undefined}
                 aria-label={`Page ${p}`}
-                className={`${item} ${p === page ? "bg-brand text-brand-contrast" : "text-ink hover:bg-canvas-muted"}`}
+                className={`${item} ${p === page ? "bg-graphite text-white" : "text-ink hover:bg-surface"}`}
               >
                 {p}
               </Link>
@@ -64,7 +64,7 @@ export function Pagination({
         )}
       </ul>
       {page < totalPages ? (
-        <Link className={`${item} gap-1 text-ink hover:bg-canvas-muted`} href={href(page + 1)}>
+        <Link className={`${item} gap-1 text-ink hover:bg-surface`} href={href(page + 1)}>
           <span className="hidden sm:inline">Next</span>
           <span className="sr-only sm:hidden">Next page</span>
           <ChevronRight aria-hidden className="size-4" />

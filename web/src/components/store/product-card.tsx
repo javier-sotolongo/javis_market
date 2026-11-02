@@ -27,13 +27,13 @@ export function ProductCard({
     .join(" · ");
 
   return (
-    <article className="group flex h-full flex-col">
+    <article className="group flex h-full flex-col rounded-xl bg-surface p-2.5 shadow-card transition-shadow hover:shadow-raised sm:p-3">
       <div className="relative">
         <Link
           href={href}
           tabIndex={-1}
           aria-hidden
-          className="relative block aspect-square overflow-hidden rounded-xl bg-tile"
+          className="relative block aspect-square overflow-hidden rounded-lg bg-tile"
         >
           <ProductImage
             image={product.image}
@@ -43,11 +43,11 @@ export function ProductCard({
           />
         </Link>
         {!product.inStock ? (
-          <span className="absolute top-3 left-3 rounded-md bg-ink/85 px-2 py-1 text-xs font-semibold text-white">
+          <span className="absolute top-2.5 left-2.5 rounded-md bg-graphite/90 px-2 py-1 text-xs font-semibold text-white">
             Out of stock
           </span>
         ) : null}
-        <div className="absolute right-3 bottom-3">
+        <div className="absolute right-2.5 bottom-2.5">
           {!product.inStock ? null : product.quickAddVariantId ? (
             <AddToCartButton
               action={addToCartAction}
@@ -58,7 +58,7 @@ export function ProductCard({
             <Link
               href={href}
               aria-label={`Choose a size for ${product.name}`}
-              className="inline-flex h-10 items-center rounded-full bg-white px-4 text-sm font-semibold text-ink shadow-[0_1px_3px_rgb(0_0_0/0.12)] transition-colors hover:bg-ink hover:text-white"
+              className="inline-flex h-10 items-center rounded-full border border-line-strong bg-surface px-4 text-sm font-semibold text-ink shadow-card transition-colors hover:border-graphite hover:bg-graphite hover:text-white"
             >
               Options
             </Link>
@@ -66,7 +66,7 @@ export function ProductCard({
         </div>
       </div>
 
-      <div className="mt-3 flex flex-1 flex-col px-0.5">
+      <div className="mt-3 flex flex-1 flex-col px-1 pb-1">
         <p className="text-[1.0625rem] font-bold text-ink tabular-nums">
           {product.hasPriceRange ? <span className="mr-1 text-sm font-medium text-ink-muted">From</span> : null}
           {formatMoney(product.price)}
@@ -97,7 +97,7 @@ export function ProductGrid({
       ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
       : "grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5";
   return (
-    <ul className={`grid ${grid} gap-x-4 gap-y-8 sm:gap-x-5 sm:gap-y-10`}>
+    <ul className={`grid ${grid} gap-3 sm:gap-4 lg:gap-5`}>
       {products.map((product, index) => (
         <li key={product.id}>
           <ProductCard product={product} priority={index < priorityCount} />

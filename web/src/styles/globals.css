@@ -4,37 +4,46 @@
  * Sistema visual de Javis Market (provisional hasta tener logo e identidad definitiva).
  * Todos los componentes usan estos tokens; para aplicar la marca final basta con cambiarlos aquí.
  *
- *   Color      canvas/surface/tile (fondos), ink (texto), line (bordes), brand (verde), accent (cálido),
- *              success/warning/danger (estados, siempre acompañados de icono y texto).
+ *   Paleta     Grafito #23272A · Blanco #FFFFFF · Titanio #8A95A5 · Esmeralda #2B584E · Canvas #E8ECEF.
+ *   Color      canvas (fondo general), surface (tarjetas y contenedores blancos), tile (baldosa de fotos),
+ *              graphite (superficies oscuras: cabecera, portada, pie), ink (texto), titanium (bordes, iconos y
+ *              texto sobre grafito), line (bordes), brand (esmeralda, reservado a las acciones de compra),
+ *              accent (esmeralda claro, solo sobre grafito), success/warning/danger (estados, siempre con icono y texto).
+ *   Contraste  El titanio puro no llega a 4.5:1 sobre blanco ni sobre canvas; el texto secundario usa sus variantes
+ *              oscuras ink-muted/ink-subtle (AA en ambos fondos). Sobre grafito, titanium sí cumple AA.
  *   Tipografía Figtree (autoalojada); escala de Tailwind con pesos 400/500/600/700.
  *   Radios     sm 6px · md 8px · lg 12px · xl 16px.
  *   Sombras    card (reposo) · raised (hover/flotante) · header (al hacer scroll).
  */
 @theme {
-  --color-canvas: #ffffff;
-  --color-canvas-muted: #f5f4f0;
+  --color-canvas: #e8ecef;
+  --color-canvas-muted: #dce1e6;
   --color-surface: #ffffff;
   /* Baldosa neutra detrás de las fotos de producto (las fotos con fondo blanco se funden con ella). */
-  --color-tile: #f3f2ee;
+  --color-tile: #f3f5f7;
 
-  --color-ink: #1d1b18;
-  --color-ink-muted: #57534e;
-  --color-ink-subtle: #78716c;
+  --color-graphite: #23272a;
+  --color-graphite-raised: #31363a;
 
-  --color-line: #ebe8e2;
-  --color-line-strong: #d9d5cd;
+  --color-ink: #23272a;
+  --color-ink-muted: #4d5866;
+  --color-ink-subtle: #5e6977;
+  --color-titanium: #8a95a5;
 
-  --color-brand: #1f5c3d;
-  --color-brand-hover: #184a31;
-  --color-brand-active: #133b27;
-  --color-brand-soft: #e9f2ec;
+  --color-line: #d3d9df;
+  --color-line-strong: #8a95a5;
+
+  --color-brand: #2b584e;
+  --color-brand-hover: #234940;
+  --color-brand-active: #1b3a33;
+  --color-brand-soft: #e4edea;
   --color-brand-contrast: #ffffff;
 
-  --color-accent: #b4662a;
-  --color-accent-soft: #fbf1e7;
+  --color-accent: #3f7d6e;
+  --color-accent-soft: #e4edea;
 
-  --color-success: #1f7a45;
-  --color-success-soft: #e8f5ec;
+  --color-success: #2b6a55;
+  --color-success-soft: #e5f0eb;
   --color-warning: #a15c07;
   --color-warning-soft: #fdf4e3;
   --color-danger: #b42318;
@@ -47,9 +56,9 @@
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
 
-  --shadow-card: 0 1px 2px rgb(29 27 24 / 0.04);
-  --shadow-raised: 0 4px 16px -4px rgb(29 27 24 / 0.12), 0 1px 3px rgb(29 27 24 / 0.06);
-  --shadow-header: 0 2px 12px -6px rgb(29 27 24 / 0.18);
+  --shadow-card: 0 1px 2px rgb(35 39 42 / 0.06);
+  --shadow-raised: 0 8px 24px -8px rgb(35 39 42 / 0.18), 0 1px 3px rgb(35 39 42 / 0.08);
+  --shadow-header: 0 4px 16px -8px rgb(35 39 42 / 0.35);
 
   --container-shop: 96rem;
 }
@@ -64,15 +73,20 @@
     font-feature-settings: "ss01";
   }
 
-  /* Foco visible y consistente para teclado en todos los controles. */
+  /* Foco visible y consistente para teclado en todos los controles (claro dentro de superficies `on-dark`). */
   :focus-visible {
-    outline: 2px solid var(--color-brand);
+    outline: 2px solid var(--focus-ring, var(--color-brand));
     outline-offset: 2px;
   }
 
   input[type="search"]::-webkit-search-cancel-button {
     cursor: pointer;
   }
+}
+
+/* Superficie grafito: el esmeralda apenas contrasta con ella, así que el foco pasa a blanco. */
+@utility on-dark {
+  --focus-ring: var(--color-white);
 }
 
 @layer utilities {

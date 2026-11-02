@@ -27,7 +27,9 @@ export function CategoryNav({ categories }: { readonly categories: readonly NavC
                 href={link.href}
                 aria-current={active ? "page" : undefined}
                 className={`flex min-h-11 items-center border-b-2 text-[0.9375rem] font-medium whitespace-nowrap transition-colors ${
-                  active ? "border-brand text-brand" : "border-transparent text-ink-muted hover:text-ink"
+                  active
+                    ? "border-ink text-ink"
+                    : "border-transparent text-ink-muted hover:border-titanium hover:text-ink"
                 }`}
               >
                 {link.name}
