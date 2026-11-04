@@ -1,0 +1,11 @@
+import { chromium } from "@playwright/test";
+const browser = await chromium.launch(process.env.E2E_BROWSER_CHANNEL ? { channel: process.env.E2E_BROWSER_CHANNEL } : {});
+const page = await browser.newPage();
+let navs = 0;
+page.on("framenavigated", (f) => { if (f === page.mainFrame()) navs++; });
+page.on("console", (m) => console.log("console", m.type(), m.text().slice(0, 300)));
+page.on("pageerror", (e) => console.log("pageerror", e.message.slice(0, 300)));
+await page.goto("http://localhost:3000/");
+await page.waitForTimeout(20000);
+console.log("navigations in 20s:", navs);
+await browser.close();
