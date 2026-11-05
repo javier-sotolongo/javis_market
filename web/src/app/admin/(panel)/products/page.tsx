@@ -94,7 +94,7 @@ export default async function AdminProductsPage({
               <tr>
                 <td colSpan={5} className="px-4 py-10 text-center text-gray-500">
                   No products found.{" "}
-                  <Link href="/admin/products/new" className="text-brand underline">
+                  <Link href="/admin/products/new" className="text-brand-ink underline">
                     Add your first product
                   </Link>
                 </td>

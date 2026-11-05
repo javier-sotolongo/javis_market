@@ -33,17 +33,17 @@ export function ProductCard({
           href={href}
           tabIndex={-1}
           aria-hidden
-          className="relative block aspect-square overflow-hidden rounded-lg bg-tile"
+          className={`relative block aspect-square overflow-hidden rounded-lg bg-tile ${product.inStock ? "" : "opacity-50 grayscale"}`}
         >
           <ProductImage
             image={product.image}
             sizes={CARD_IMAGE_SIZES}
             priority={priority}
-            className={`p-[7%] transition-transform duration-300 group-hover:scale-[1.03] ${product.inStock ? "" : "opacity-50 grayscale"}`}
+            className="p-[7%] transition-transform duration-300 group-hover:scale-[1.03]"
           />
         </Link>
         {!product.inStock ? (
-          <span className="absolute top-2.5 left-2.5 rounded-md bg-graphite/90 px-2 py-1 text-xs font-semibold text-white">
+          <span className="absolute top-2.5 left-2.5 rounded-md bg-navy/90 px-2 py-1 text-xs font-semibold text-white">
             Out of stock
           </span>
         ) : null}
@@ -58,7 +58,7 @@ export function ProductCard({
             <Link
               href={href}
               aria-label={`Choose a size for ${product.name}`}
-              className="inline-flex h-10 items-center rounded-full border border-line-strong bg-surface px-4 text-sm font-semibold text-ink shadow-card transition-colors hover:border-graphite hover:bg-graphite hover:text-white"
+              className="inline-flex h-10 items-center rounded-full border border-line-strong bg-surface px-4 text-sm font-semibold text-ink shadow-card transition-colors hover:border-navy hover:bg-navy hover:text-white"
             >
               Options
             </Link>

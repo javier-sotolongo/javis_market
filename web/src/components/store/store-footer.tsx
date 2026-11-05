@@ -7,18 +7,18 @@ export function StoreFooter({
 }: {
   readonly categories: readonly { readonly id: string; readonly name: string; readonly slug: string }[];
 }) {
-  const link = "text-titanium hover:text-white hover:underline underline-offset-4";
+  const link = "text-steel hover:text-brand hover:underline underline-offset-4";
   return (
-    <footer className="mt-20 bg-graphite text-white on-dark">
+    <footer className="mt-20 border-t-4 border-brand bg-navy text-white on-dark">
       <div className="mx-auto grid max-w-shop gap-10 px-4 py-12 sm:grid-cols-[2fr_1fr_1fr] sm:px-6 lg:px-10">
         <div>
-          <Wordmark />
-          <p className="mt-4 max-w-sm text-sm text-titanium">
+          <Wordmark tone="reversed" variant="full" className="h-20 w-auto" />
+          <p className="mt-4 max-w-sm text-sm text-steel">
             Online store for the United States. All prices are in US dollars (USD).
           </p>
         </div>
         <nav aria-label="Shop">
-          <h2 className="text-sm font-semibold">Shop</h2>
+          <h2 className="text-sm font-bold tracking-wide text-white uppercase">Shop</h2>
           <ul className="mt-4 space-y-2.5 text-sm">
             <li>
               <Link href="/products" className={link}>
@@ -35,7 +35,7 @@ export function StoreFooter({
           </ul>
         </nav>
         <nav aria-label="Your order">
-          <h2 className="text-sm font-semibold">Your order</h2>
+          <h2 className="text-sm font-bold tracking-wide text-white uppercase">Your order</h2>
           <ul className="mt-4 space-y-2.5 text-sm">
             <li>
               <Link href="/cart" className={link}>
@@ -46,7 +46,7 @@ export function StoreFooter({
         </nav>
       </div>
       <div className="border-t border-white/10">
-        <p className="mx-auto max-w-shop px-4 py-5 text-xs text-titanium sm:px-6 lg:px-10">
+        <p className="mx-auto max-w-shop px-4 py-5 text-xs text-steel sm:px-6 lg:px-10">
           © {new Date().getFullYear()} {BRAND_NAME}
         </p>
       </div>

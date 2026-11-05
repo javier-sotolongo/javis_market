@@ -21,23 +21,36 @@ export default async function HomePage() {
 
   return (
     <div className="mx-auto max-w-shop px-4 sm:px-6 lg:px-10">
-      <section className="mt-6 overflow-hidden rounded-2xl bg-graphite text-white on-dark lg:mt-8">
-        <div className="grid gap-8 px-6 py-9 sm:px-10 sm:py-12 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:px-14">
+      <section className="relative mt-6 overflow-hidden rounded-2xl bg-navy text-white on-dark lg:mt-8">
+        {/* Decoración de marca: el punto naranja de la "i" y las líneas de velocidad del carrito. */}
+        <span aria-hidden className="absolute -top-16 -right-16 size-56 rounded-full bg-brand/15" />
+        <span aria-hidden className="absolute -bottom-24 -left-20 size-64 rounded-full bg-leaf/15" />
+        <div className="relative grid gap-8 px-6 py-9 sm:px-10 sm:py-12 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:px-14">
           <div>
-            <p className="text-xs font-semibold tracking-[0.18em] text-titanium uppercase">Javis Market</p>
-            <h1 className="mt-3 max-w-xl text-3xl leading-tight font-bold tracking-tight text-balance sm:text-4xl lg:text-[2.75rem]">
-              Everyday groceries and home essentials
+            <p className="flex items-center gap-3 text-xs font-bold tracking-[0.22em] text-brand uppercase">
+              <span aria-hidden className="h-0.5 w-8 rounded-full bg-brand" />
+              Your best choice
+            </p>
+            <h1 className="mt-4 max-w-xl text-3xl leading-[1.1] font-extrabold tracking-tight text-balance sm:text-4xl lg:text-5xl">
+              Everyday groceries and <span className="text-brand">home essentials</span>
             </h1>
-            <p className="mt-4 max-w-lg text-titanium">
+            <p className="mt-4 max-w-lg text-steel">
               Pantry staples, drinks, snacks, household and personal care products. All prices in US dollars.
             </p>
-            <Link
-              href="/products"
-              className="mt-7 inline-flex h-12 items-center gap-2 rounded-full bg-brand px-6 font-semibold text-brand-contrast ring-1 ring-white/15 transition-colors ring-inset hover:bg-accent"
-            >
-              Shop all products
-              <ArrowRight aria-hidden className="size-4" />
-            </Link>
+            <div className="mt-7 flex items-center gap-3">
+              <span aria-hidden className="flex flex-col items-end gap-1.5">
+                <span className="h-1.5 w-7 rounded-full bg-white/70" />
+                <span className="h-1.5 w-9 rounded-full bg-white/70" />
+                <span className="h-1.5 w-6 rounded-full bg-white/70" />
+              </span>
+              <Link
+                href="/products"
+                className="inline-flex h-12 items-center gap-2 rounded-full bg-brand px-6 font-bold text-brand-contrast shadow-raised transition-colors hover:bg-brand-hover active:bg-brand-active"
+              >
+                Shop all products
+                <ArrowRight aria-hidden className="size-4" />
+              </Link>
+            </div>
           </div>
           {rows.length > 0 ? (
             <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3" aria-label="Categories">
@@ -45,7 +58,7 @@ export default async function HomePage() {
                 <li key={category.id}>
                   <Link
                     href={`/categories/${category.slug}`}
-                    className="group block rounded-xl bg-surface p-2 text-ink transition-shadow hover:shadow-raised hover:ring-2 hover:ring-titanium"
+                    className="group block rounded-xl bg-surface p-2 text-ink transition-shadow hover:shadow-raised hover:ring-2 hover:ring-brand"
                   >
                     <span className="relative block aspect-[4/3] overflow-hidden rounded-lg bg-tile">
                       <ProductImage
@@ -67,12 +80,12 @@ export default async function HomePage() {
         products.items.length > 0 ? (
           <section key={category.id} aria-labelledby={`row-${category.id}`} className="mt-14">
             <div className="mb-5 flex items-end justify-between gap-4">
-              <h2 id={`row-${category.id}`} className="text-2xl font-bold tracking-tight text-ink">
+              <h2 id={`row-${category.id}`} className="text-2xl font-extrabold tracking-tight text-ink">
                 {category.name}
               </h2>
               <Link
                 href={`/categories/${category.slug}`}
-                className="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-brand hover:underline"
+                className="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-brand-ink hover:underline"
               >
                 See all {category.productCount}
                 <ArrowRight aria-hidden className="size-4" />
@@ -86,7 +99,7 @@ export default async function HomePage() {
       {latest ? (
         latest.items.length > 0 ? (
           <section className="mt-14">
-            <h2 className="mb-5 text-2xl font-bold tracking-tight text-ink">New arrivals</h2>
+            <h2 className="mb-5 text-2xl font-extrabold tracking-tight text-ink">New arrivals</h2>
             <ProductGrid products={latest.items} columns="wide" />
           </section>
         ) : (

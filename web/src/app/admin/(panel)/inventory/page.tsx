@@ -69,7 +69,7 @@ export default async function InventoryPage({
                   </Badge>
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <Link href={`/admin/inventory/${item.variantId}`} className="text-sm text-brand underline">
+                  <Link href={`/admin/inventory/${item.variantId}`} className="text-sm text-brand-ink underline">
                     Adjust
                   </Link>
                 </td>

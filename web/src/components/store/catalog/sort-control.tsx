@@ -29,7 +29,7 @@ export function SortControl({ basePath, params }: { readonly basePath: string; r
         ))}
       </SubmitOnChangeSelect>
       <noscript>
-        <button type="submit" className="text-sm font-semibold text-brand underline">
+        <button type="submit" className="text-sm font-semibold text-brand-ink underline">
           Apply
         </button>
       </noscript>

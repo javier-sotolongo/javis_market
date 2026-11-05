@@ -1,6 +1,6 @@
 import { ArrowRight, Search } from "lucide-react";
 
-/** Buscador del catálogo (sobre la barra grafito de la cabecera): formulario GET a /products, funciona sin JavaScript. */
+/** Buscador del catálogo (en la barra blanca de la cabecera): formulario GET a /products, funciona sin JavaScript. */
 export function SearchForm({
   defaultValue = "",
   id = "site-search",
@@ -25,12 +25,12 @@ export function SearchForm({
         placeholder="Search products and brands"
         autoComplete="off"
         enterKeyHint="search"
-        className="h-12 w-full rounded-full border border-transparent bg-surface pr-14 pl-12 text-[0.9375rem] text-ink transition-shadow placeholder:text-ink-subtle focus:border-titanium focus:ring-4 focus:ring-white/25 focus:outline-none"
+        className="h-12 w-full rounded-full border border-line bg-canvas pr-14 pl-12 text-[0.9375rem] text-ink transition-[border-color,box-shadow,background-color] placeholder:text-ink-subtle hover:border-line-strong focus:border-brand focus:bg-surface focus:ring-4 focus:ring-brand/15 focus:outline-none"
       />
       <button
         type="submit"
         aria-label="Search"
-        className="absolute top-1.5 right-1.5 flex size-9 items-center justify-center rounded-full bg-brand text-brand-contrast transition-colors hover:bg-brand-hover"
+        className="absolute top-1.5 right-1.5 flex size-9 items-center justify-center rounded-full bg-brand text-brand-contrast transition-colors hover:bg-brand-hover active:bg-brand-active"
       >
         <ArrowRight aria-hidden className="size-4" />
       </button>

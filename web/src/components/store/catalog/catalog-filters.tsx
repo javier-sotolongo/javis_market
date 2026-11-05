@@ -26,7 +26,7 @@ export function CatalogFilters({
 }) {
   const linkClass = (active: boolean) =>
     `flex min-h-10 items-center justify-between gap-3 rounded-lg px-3 text-[0.9375rem] ${
-      active ? "bg-graphite text-white font-semibold" : "text-ink-muted hover:bg-canvas-muted hover:text-ink"
+      active ? "bg-navy text-white font-semibold" : "text-ink-muted hover:bg-canvas-muted hover:text-ink"
     }`;
   return (
     <div className="space-y-7">
@@ -53,7 +53,7 @@ export function CatalogFilters({
               >
                 <span className="truncate">{category.name}</span>
                 <span
-                  className={`text-sm tabular-nums ${activeSlug === category.slug ? "text-titanium" : "text-ink-subtle"}`}
+                  className={`text-sm tabular-nums ${activeSlug === category.slug ? "text-steel" : "text-ink-subtle"}`}
                 >
                   {category.productCount}
                 </span>
@@ -80,7 +80,7 @@ export function CatalogFilters({
             In stock only
           </label>
           <noscript>
-            <button type="submit" className="mt-1 text-sm font-semibold text-brand underline">
+            <button type="submit" className="mt-1 text-sm font-semibold text-brand-ink underline">
               Apply
             </button>
           </noscript>

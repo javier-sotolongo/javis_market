@@ -88,7 +88,7 @@ export default async function ProductPage({ params }: Props) {
             </h2>
             <Link
               href={`/categories/${category!.slug}`}
-              className="inline-flex min-h-11 items-center text-sm font-semibold text-brand hover:underline"
+              className="inline-flex min-h-11 items-center text-sm font-semibold text-brand-ink hover:underline"
             >
               View all
             </Link>

@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   description: `${BRAND_NAME} online store`,
 };
 
-// Grafito, como la barra superior de la cabecera.
-export const viewport: Viewport = { themeColor: "#23272a" };
+// Azul marino de la marca (barra de categorías y pie).
+export const viewport: Viewport = { themeColor: "#04214f" };
 
 // Idioma de la tienda: inglés.
 export default function RootLayout({ children }: { readonly children: ReactNode }) {

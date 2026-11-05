@@ -46,7 +46,7 @@ export default async function CartPage() {
         </div>
         <Link
           href="/products"
-          className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-brand hover:underline"
+          className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-brand-ink hover:underline"
         >
           <ArrowLeft aria-hidden className="size-4" />
           Continue shopping
@@ -74,12 +74,12 @@ export default async function CartPage() {
                   href={`/products/${line.productSlug}`}
                   tabIndex={-1}
                   aria-hidden
-                  className="relative size-24 shrink-0 overflow-hidden rounded-xl bg-tile sm:size-28"
+                  className={`relative size-24 shrink-0 overflow-hidden rounded-xl bg-tile sm:size-28 ${unavailable ? "opacity-50 grayscale" : ""}`}
                 >
                   <ProductImage
                     image={line.imageUrl ? { url: line.imageUrl, alt: "", width: 0, height: 0 } : null}
                     sizes="112px"
-                    className={`p-[8%] ${unavailable ? "opacity-50 grayscale" : ""}`}
+                    className="p-[8%]"
                   />
                 </Link>
                 <div className="flex min-w-0 flex-1 flex-col justify-between gap-3">

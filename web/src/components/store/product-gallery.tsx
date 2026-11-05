@@ -23,7 +23,7 @@ export function ProductGallery({ images, name }: { readonly images: readonly Sto
                 aria-label={`Show image ${i + 1} of ${images.length}`}
                 aria-pressed={i === index}
                 className={`relative block aspect-square w-full overflow-hidden rounded-lg bg-surface ring-2 ring-offset-2 ring-offset-canvas ${
-                  i === index ? "ring-ink" : "ring-transparent hover:ring-line-strong"
+                  i === index ? "ring-brand" : "ring-transparent hover:ring-line-strong"
                 }`}
               >
                 <ProductImage image={{ ...image, alt: "" }} sizes="120px" className="p-2" />

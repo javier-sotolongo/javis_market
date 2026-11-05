@@ -1,14 +1,14 @@
 import { SearchX } from "lucide-react";
 import Link from "next/link";
 import { BRAND_NAME } from "@javis-market/shared";
+import { Logo } from "@/components/brand/logo";
 import { buttonClass } from "@/components/ui/button-class";
 
 export default function NotFound() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 px-4 text-center">
-      <Link href="/" className="text-xl font-bold tracking-tight text-ink">
-        <span className="text-brand">Javis</span> Market
-        <span className="sr-only"> ({BRAND_NAME} home)</span>
+      <Link href="/" aria-label={`${BRAND_NAME} home`}>
+        <Logo variant="full" className="h-24 w-auto" />
       </Link>
       <span className="mt-6 flex size-14 items-center justify-center rounded-full bg-surface text-ink-subtle shadow-card">
         <SearchX aria-hidden className="size-7" strokeWidth={1.5} />

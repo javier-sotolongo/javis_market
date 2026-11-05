@@ -14,7 +14,7 @@ export function CategoryCheckboxes({
       {categories.length === 0 ? (
         <p className="text-sm text-gray-500">
           No categories yet.{" "}
-          <Link href="/admin/categories" className="text-brand underline">
+          <Link href="/admin/categories" className="text-brand-ink underline">
             Create one
           </Link>
         </p>

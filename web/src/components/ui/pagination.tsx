@@ -55,7 +55,7 @@ export function Pagination({
                 href={href(p)}
                 aria-current={p === page ? "page" : undefined}
                 aria-label={`Page ${p}`}
-                className={`${item} ${p === page ? "bg-graphite text-white" : "text-ink hover:bg-surface"}`}
+                className={`${item} ${p === page ? "bg-navy text-white" : "text-ink hover:bg-surface"}`}
               >
                 {p}
               </Link>

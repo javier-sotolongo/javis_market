@@ -34,7 +34,7 @@ export function ActiveFilters({
       ))}
       <Link
         href="/products"
-        className="inline-flex min-h-9 items-center px-2 text-sm font-semibold text-brand underline-offset-4 hover:underline"
+        className="inline-flex min-h-9 items-center px-2 text-sm font-semibold text-brand-ink underline-offset-4 hover:underline"
       >
         Clear all
       </Link>

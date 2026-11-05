@@ -1,49 +1,54 @@
 @import "tailwindcss";
 
 /*
- * Sistema visual de Javis Market (provisional hasta tener logo e identidad definitiva).
- * Todos los componentes usan estos tokens; para aplicar la marca final basta con cambiarlos aquí.
+ * Sistema visual de Javis Market, derivado del logo oficial (public/brand/, original en docs/brand/).
+ * Todos los componentes usan estos tokens; para ajustar la marca basta con cambiarlos aquí.
  *
- *   Paleta     Grafito #23272A · Blanco #FFFFFF · Titanio #8A95A5 · Esmeralda #2B584E · Canvas #E8ECEF.
+ *   Paleta     Azul marino #04214F (letras "Javis", ruedas) · Naranja #FB5C04 ("Market", carrito) ·
+ *              Verde hoja #3B8202 · Blanco. Neutros fríos teñidos de azul marino.
  *   Color      canvas (fondo general), surface (tarjetas y contenedores blancos), tile (baldosa de fotos),
- *              graphite (superficies oscuras: cabecera, portada, pie), ink (texto), titanium (bordes, iconos y
- *              texto sobre grafito), line (bordes), brand (esmeralda, reservado a las acciones de compra),
- *              accent (esmeralda claro, solo sobre grafito), success/warning/danger (estados, siempre con icono y texto).
- *   Contraste  El titanio puro no llega a 4.5:1 sobre blanco ni sobre canvas; el texto secundario usa sus variantes
- *              oscuras ink-muted/ink-subtle (AA en ambos fondos). Sobre grafito, titanium sí cumple AA.
- *   Tipografía Figtree (autoalojada); escala de Tailwind con pesos 400/500/600/700.
+ *              navy (superficies oscuras: barra de categorías, portada, pie), ink (texto, azul marino),
+ *              steel (texto e iconos sobre azul marino), line (bordes), brand (naranja, reservado a las acciones
+ *              de compra), brand-ink (naranja oscuro para texto y enlaces sobre claro), leaf (verde de marca, frescura),
+ *              success/warning/danger (estados, siempre con icono y texto).
+ *   Contraste  El blanco sobre el naranja del logo solo da 3.2:1, así que los botones naranjas llevan texto azul
+ *              marino (5:1, AA). Sobre fondos claros el naranja no llega a AA como texto: se usa brand-ink (5:1).
+ *              El naranja sí cumple AA como texto sobre azul marino (5:1).
+ *   Tipografía Figtree (autoalojada), geométrica como el logotipo; títulos en 800 con tracking ajustado.
  *   Radios     sm 6px · md 8px · lg 12px · xl 16px.
  *   Sombras    card (reposo) · raised (hover/flotante) · header (al hacer scroll).
  */
 @theme {
-  --color-canvas: #e8ecef;
-  --color-canvas-muted: #dce1e6;
+  --color-canvas: #f4f6f9;
+  --color-canvas-muted: #e6ebf2;
   --color-surface: #ffffff;
   /* Baldosa neutra detrás de las fotos de producto (las fotos con fondo blanco se funden con ella). */
-  --color-tile: #f3f5f7;
+  --color-tile: #f6f8fb;
 
-  --color-graphite: #23272a;
-  --color-graphite-raised: #31363a;
+  --color-navy: #04214f;
+  --color-navy-raised: #0d3170;
+  --color-navy-deep: #021738;
 
-  --color-ink: #23272a;
-  --color-ink-muted: #4d5866;
-  --color-ink-subtle: #5e6977;
-  --color-titanium: #8a95a5;
+  --color-ink: #04214f;
+  --color-ink-muted: #44546d;
+  --color-ink-subtle: #56667f;
+  --color-steel: #a9b8d0;
 
-  --color-line: #d3d9df;
-  --color-line-strong: #8a95a5;
+  --color-line: #dbe2eb;
+  --color-line-strong: #8193ae;
 
-  --color-brand: #2b584e;
-  --color-brand-hover: #234940;
-  --color-brand-active: #1b3a33;
-  --color-brand-soft: #e4edea;
-  --color-brand-contrast: #ffffff;
+  --color-brand: #fb5c04;
+  --color-brand-hover: #ff7629;
+  --color-brand-active: #e85200;
+  --color-brand-soft: #fff0e6;
+  --color-brand-contrast: #04214f;
+  --color-brand-ink: #c24100;
 
-  --color-accent: #3f7d6e;
-  --color-accent-soft: #e4edea;
+  --color-leaf: #3b8202;
+  --color-leaf-soft: #edf6e4;
 
-  --color-success: #2b6a55;
-  --color-success-soft: #e5f0eb;
+  --color-success: #2f6f0a;
+  --color-success-soft: #edf6e4;
   --color-warning: #a15c07;
   --color-warning-soft: #fdf4e3;
   --color-danger: #b42318;
@@ -56,9 +61,9 @@
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
 
-  --shadow-card: 0 1px 2px rgb(35 39 42 / 0.06);
-  --shadow-raised: 0 8px 24px -8px rgb(35 39 42 / 0.18), 0 1px 3px rgb(35 39 42 / 0.08);
-  --shadow-header: 0 4px 16px -8px rgb(35 39 42 / 0.35);
+  --shadow-card: 0 1px 2px rgb(4 33 79 / 0.06);
+  --shadow-raised: 0 8px 24px -8px rgb(4 33 79 / 0.18), 0 1px 3px rgb(4 33 79 / 0.08);
+  --shadow-header: 0 4px 16px -8px rgb(4 33 79 / 0.35);
 
   --container-shop: 96rem;
 }
@@ -73,7 +78,7 @@
     font-feature-settings: "ss01";
   }
 
-  /* Foco visible y consistente para teclado en todos los controles (claro dentro de superficies `on-dark`). */
+  /* Foco visible y consistente para teclado (naranja de marca; blanco dentro de superficies `on-dark`). */
   :focus-visible {
     outline: 2px solid var(--focus-ring, var(--color-brand));
     outline-offset: 2px;
@@ -84,7 +89,7 @@
   }
 }
 
-/* Superficie grafito: el esmeralda apenas contrasta con ella, así que el foco pasa a blanco. */
+/* Superficie azul marino: el foco pasa a blanco para máxima visibilidad. */
 @utility on-dark {
   --focus-ring: var(--color-white);
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { BRAND_NAME } from "@javis-market/shared";
+import { Logo } from "@/components/brand/logo";
 import { getCurrentAdmin } from "@/lib/server/session";
 import { LoginForm } from "./login-form";
 
@@ -12,8 +12,8 @@ export default async function LoginPage() {
   return (
     <main className="flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-sm rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
-        <p className="text-xl font-semibold text-brand">{BRAND_NAME}</p>
-        <h1 className="mt-1 mb-6 text-sm text-gray-500">Store administration</h1>
+        <Logo variant="full" className="mx-auto h-20 w-auto" priority />
+        <h1 className="mt-4 mb-6 text-center text-sm text-gray-500">Store administration</h1>
         <LoginForm />
       </div>
     </main>

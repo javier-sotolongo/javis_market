@@ -23,7 +23,7 @@ export function AdminNav() {
             key={link.href}
             href={link.href}
             aria-current={active ? "page" : undefined}
-            className={`rounded-md px-3 py-2 text-sm whitespace-nowrap ${active ? "bg-brand-soft font-medium text-brand" : "text-gray-700 hover:bg-gray-100"}`}
+            className={`rounded-md px-3 py-2 text-sm whitespace-nowrap ${active ? "bg-brand-soft font-medium text-brand-ink" : "text-gray-700 hover:bg-gray-100"}`}
           >
             {link.label}
           </Link>
