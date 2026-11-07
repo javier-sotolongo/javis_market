@@ -1,7 +1,7 @@
 # Despliegue
 
-> Nada de esto se ha ejecutado todavía: no hay servidor configurado ni despliegue realizado. Los valores entre
-> `<...>` son marcadores pendientes. Plantillas en [`infra/`](../infra/).
+> Scripts listos en [`infra/server/`](../infra/server/); valores (dominios, rutas, roles) en
+> [`infra/server/config.sh`](../infra/server/config.sh). Ver [Puesta en marcha del VPS](#puesta-en-marcha-del-vps).
 
 ## Entornos
 
@@ -22,6 +22,52 @@ npm run db:migrate:dev        # cuando existan modelos
 npm run dev                   # web en http://localhost:3000
 npm run dev:worker            # worker, en otra terminal
 ```
+
+## Puesta en marcha del VPS
+
+VPS `208.109.241.127` (Ubuntu), usuario `javis`. Dominio canónico **javismarkets.com**; `javismarket.us`,
+`javismarket.es` y los `www` redirigen (301) a él.
+
+**1. DNS** (en GoDaddy, para los tres dominios): registro `A` de `@` → `208.109.241.127` y `CNAME` de `www` → `@`
+(borrar el `A`/redirección de "parking" que trae por defecto).
+
+**2. Código** (repositorio público), en el servidor:
+
+```bash
+sudo apt update && sudo apt install -y git
+cd ~/prod && git clone https://github.com/javier-sotolongo/javis_market.git .
+```
+
+**3. Sistema** (una vez; idempotente): `sudo bash infra/server/setup.sh` — Node 24, PM2, PostgreSQL, Nginx (solo
+HTTP), Certbot, ufw, fail2ban, swap si hace falta, base y roles con contraseñas aleatorias, archivos de entorno,
+copia diaria de la base y arranque de PM2 con el sistema.
+
+**4. Primer despliegue** (como `javis`, sin sudo): `bash infra/server/deploy.sh`. La web ya responde en
+`http://208.109.241.127`.
+
+**5. Cuenta del dueño**:
+
+```bash
+set -a && . /srv/javis-market/env/production.env && set +a
+npm run admin:create -- --email <OWNER_EMAIL> --name "<OWNER_NAME>"
+```
+
+**6. HTTPS**, cuando los DNS apunten al servidor (`dig +short javismarkets.com`):
+`sudo LETSENCRYPT_EMAIL=<correo> bash infra/server/ssl.sh`. Incluye solo los dominios que ya apuntan; repetirlo
+cuando propaguen los demás.
+
+**Despliegues siguientes**: `bash infra/server/deploy.sh` (o `deploy.sh <tag>`). Hace copia de la base antes de
+migrar.
+
+| Elemento            | Ruta                                         |
+| ------------------- | -------------------------------------------- |
+| Código              | `~/prod` (clon del repositorio)              |
+| Entorno de la app   | `/srv/javis-market/env/production.env` (600) |
+| URL de migraciones  | `/srv/javis-market/env/migrate.env` (600)    |
+| Imágenes públicas   | `/srv/javis-market/storage/public`           |
+| Documentos privados | `/srv/javis-market/storage/private`          |
+| Logs de PM2         | `/srv/javis-market/logs`                     |
+| Copias locales      | `/srv/javis-market/backups` (14 por tipo)    |
 
 ## Estructura prevista en el VPS
 

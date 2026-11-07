@@ -1,8 +1,11 @@
 # =============================================================================
-# PLANTILLA de Nginx para Javis Market (no instalada en ningún servidor).
+# PLANTILLA de Nginx (HTTPS) para Javis Market. La rellena e instala infra/server/ssl.sh
+# con los valores de infra/server/config.sh.
 #
-# Marcadores pendientes:
-#   <DOMAIN>              dominio facilitado por Marco (pendiente)
+# Marcadores:
+#   <DOMAIN>              dominio canónico (javismarkets.com)
+#   <ALL_DOMAINS>         todos los nombres servidos (canónico, www y dominios adicionales)
+#   <REDIRECT_DOMAINS>    nombres con certificado que redirigen al canónico (www, .us, .es…)
 #   <APP_PORT>            puerto interno de Next.js (PORT en el archivo de entorno)
 #   <STORAGE_PUBLIC_DIR>  directorio persistente de imágenes públicas, fuera del repositorio
 #   <CERT_PATH>/<KEY_PATH> certificado TLS (p. ej. emitido con Certbot)
@@ -21,9 +24,9 @@ limit_req_zone $binary_remote_addr zone=javis_sensitive:10m rate=10r/m;
 
 # HTTP → HTTPS
 server {
-    listen 80;
-    listen [::]:80;
-    server_name <DOMAIN> www.<DOMAIN>;
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name <ALL_DOMAINS>;
 
     # Necesario si se usa Certbot con el método webroot.
     location /.well-known/acme-challenge/ {
@@ -35,12 +38,12 @@ server {
     }
 }
 
-# www → dominio canónico
+# www y dominios adicionales → dominio canónico
 server {
     listen 443 ssl;
     listen [::]:443 ssl;
     http2 on;
-    server_name www.<DOMAIN>;
+    server_name <REDIRECT_DOMAINS>;
     ssl_certificate     <CERT_PATH>;
     ssl_certificate_key <KEY_PATH>;
     return 301 https://<DOMAIN>$request_uri;

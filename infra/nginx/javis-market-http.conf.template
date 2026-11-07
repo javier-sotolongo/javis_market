@@ -1,0 +1,55 @@
+# =============================================================================
+# Nginx PROVISIONAL (solo HTTP) para Javis Market. Lo instala infra/server/setup.sh mientras no hay
+# certificados; infra/server/ssl.sh lo sustituye por javis-market.conf.template (HTTPS).
+# Responde también por IP (default_server) para probar antes de cambiar los DNS.
+# =============================================================================
+
+upstream javis_web {
+    server 127.0.0.1:<APP_PORT>;
+    keepalive 16;
+}
+
+limit_req_zone $binary_remote_addr zone=javis_sensitive:10m rate=10r/m;
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name <ALL_DOMAINS>;
+
+    server_tokens off;
+    client_max_body_size 60m;
+
+    # Validación de Let's Encrypt (método webroot).
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location ~ /\. {
+        deny all;
+        return 404;
+    }
+
+    location /media/ {
+        alias <STORAGE_PUBLIC_DIR>/;
+        autoindex off;
+        location ~* \.(?:jpe?g|png|webp|avif|gif)$ {
+            add_header Cache-Control "public, max-age=2592000, immutable";
+            add_header X-Content-Type-Options "nosniff" always;
+        }
+        return 404;
+    }
+
+    location = /api/auth/sign-in/email {
+        limit_req zone=javis_sensitive burst=5 nodelay;
+        proxy_pass http://javis_web;
+        include /etc/nginx/snippets/javis-proxy-headers.conf;
+    }
+
+    location / {
+        proxy_pass http://javis_web;
+        include /etc/nginx/snippets/javis-proxy-headers.conf;
+    }
+
+    access_log /var/log/nginx/javis-market.access.log;
+    error_log  /var/log/nginx/javis-market.error.log warn;
+}
