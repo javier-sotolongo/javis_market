@@ -61,11 +61,14 @@ fi
 
 # --- Firewall -------------------------------------------------------------------
 step "Firewall (ufw): SSH, 80 y 443"
-ssh_port=$(sshd -T 2>/dev/null | awk '/^port / {print $2; exit}')
+# Puerto SSH real (en Ubuntu reciente sshd va por socket y `sshd -T` puede fallar: no debe cortar el script).
+ssh_port=$( (sshd -T 2>/dev/null || true) | awk '/^port / {print $2; exit}')
 ufw allow "${ssh_port:-22}/tcp"
+ufw allow 22/tcp
 ufw allow 'Nginx Full'
 ufw --force enable
-systemctl enable --now fail2ban unattended-upgrades
+systemctl enable --now unattended-upgrades || echo "Aviso: no se pudo activar unattended-upgrades"
+systemctl enable --now fail2ban || echo "Aviso: no se pudo activar fail2ban (no impide continuar)"
 
 # --- Directorios persistentes ---------------------------------------------------
 step "Directorios en $BASE_DIR"
